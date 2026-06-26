@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leonardo Museum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d48b;
+    --gold-dim: rgba(201,168,76,0.3);
+    --blue: #3b82f6;
+    --cyan: #22d3ee;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+    --amber-950: #1a0a00;
+    --amber-700: #b45309;
+    --stone-900: #1c1917;
+    --stone-800: #292524;
+    --orange: #b87333;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--slate-900);
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── TIMELINE NAV ── */
+  .timeline-nav {
+    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+    z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .timeline-nav .rail {
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.25), transparent);
+  }
+  .timeline-dot {
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--slate-700);
+    background: var(--slate-700); cursor: pointer; position: relative; transition: all 0.3s;
+  }
+  .timeline-dot:hover { border-color: var(--gold-dim); }
+  .timeline-dot.active { border-color: #fff; transform: scale(1.3); box-shadow: 0 0 12px var(--gold-dim); }
+  .timeline-dot.active[data-era="present"] { background: var(--gold); }
+  .timeline-dot.active[data-era="roma"] { background: #b45309; }
+  .timeline-dot.active[data-era="industrial"] { background: var(--orange); }
+  .timeline-dot.active[data-era="future"] { background: var(--blue); }
+  .timeline-dot.active[data-era="closing"] { background: var(--gold); }
+  .timeline-label {
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; font-weight: 500; white-space: nowrap; padding: 3px 8px;
+    border-radius: 4px; background: rgba(30,41,59,0.9); color: var(--slate-400);
+    opacity: 0; pointer-events: none; transition: all 0.2s;
+  }
+  .timeline-dot:hover .timeline-label,
+  .timeline-dot.active .timeline-label { opacity: 1; color: var(--gold); }
+
+  /* ── SECTIONS ── */
+  section { min-height: 100vh; position: relative; overflow: hidden; }
+
+  /* ── ANIMATIONS ── */
+  .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up.d1 { transition-delay: 0.1s; }
+  .fade-up.d2 { transition-delay: 0.2s; }
+  .fade-up.d3 { transition-delay: 0.3s; }
+  .fade-up.d4 { transition-delay: 0.4s; }
+  .fade-up.d5 { transition-delay: 0.5s; }
+
+  /* ── LAYER: PRESENT ── */
+  #present {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(to bottom, var(--slate-900), var(--slate-800), var(--slate-900));
+  }
+  #present .glow-1 {
+    position: absolute; top: 25%; left: 25%; width: 380px; height: 380px;
+    background: var(--gold); border-radius: 50%; filter: blur(128px); opacity: 0.08;
+  }
+  #present .glow-2 {
+    position: absolute; bottom: 25%; right: 25%; width: 300px; height: 300px;
+    background: var(--blue); border-radius: 50%; filter: blur(128px); opacity: 0.08;
+  }
+  .badge {
+    display: inline-block; padding: 6px 16px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.3em; text-transform: uppercase; border: 1px solid;
+    border-radius: 999px;
+  }
+  .badge-gold { color: var(--gold); border-color: var(--gold-dim); }
+  .badge-amber { color: #d97706; border-color: rgba(217,119,6,0.3); }
+  .badge-orange { color: #fb923c; border-color: rgba(251,146,60,0.3); }
+  .badge-blue { color: var(--blue); border-color: rgba(59,130,246,0.3); }
+
+  .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; margin: 16px 0; }
+  .hero-title .accent {
+    background: linear-gradient(90deg, #c9a84c, #fde68a, #c9a84c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--slate-300); line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+  .avatars { display: flex; align-items: center; justify-content: center; gap: 32px; margin: 32px 0; }
+  .avatar-group { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-weight: 700; font-size: 18px;
+  }
+  .avatar-m { background: linear-gradient(135deg, #c9a84c, #b45309); color: var(--slate-900); }
+  .avatar-s { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: #fff; }
+  .avatar-info p:first-child { font-weight: 500; font-size: 14px; }
+  .avatar-info p:last-child { color: var(--slate-400); font-size: 12px; }
+  .divider-v { width: 1px; height: 40px; background: var(--slate-700); }
+
+  .scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 24px; }
+  .scroll-cue span { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.5); }
+  .scroll-pill {
+    width: 24px; height: 40px; border-radius: 12px; border: 2px solid rgba(201,168,76,0.35);
+    display: flex; align-items: flex-start; justify-content: center; padding-top: 6px;
+  }
+  .scroll-pill .dot {
+    width: 6px; height: 10px; border-radius: 3px; background: var(--gold);
+    animation: scrollBounce 1.5s infinite;
+  }
+  @keyframes scrollBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+  /* ── LAYER: ROMA ── */
+  #roma {
+    padding: 96px 24px;
+    background: linear-gradient(to bottom, var(--amber-950), var(--stone-900), var(--amber-950));
+  }
+  #roma .bg-lines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201,168,76,0.06) 40px, rgba(201,168,76,0.06) 41px);
+    opacity: 0.5;
+  }
+  .section-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; text-align: center; }
+  .section-sub { text-align: center; font-style: italic; letter-spacing: 0.15em; font-size: 14px; margin-top: 8px; }
+  .section-narrative { text-align: center; max-width: 640px; margin: 24px auto 48px; line-height: 1.7; font-size: 15px; }
+  .text-amber { color: var(--gold); }
+  .text-amber-dim { color: rgba(201,168,76,0.6); }
+  .text-orange { color: #fb923c; }
+  .text-orange-dim { color: rgba(184,115,51,0.7); }
+  .text-blue { color: var(--blue); }
+
+  /* Blueprint */
+  .blueprint-container {
+    max-width: 720px; margin: 0 auto; border: 2px solid rgba(180,83,9,0.3);
+    border-radius: 12px; background: rgba(26,10,0,0.4); backdrop-filter: blur(8px); padding: 32px;
+  }
+  .blueprint-header { text-align: center; margin-bottom: 24px; }
+  .blueprint-header h3 { font-size: 1.5rem; font-weight: 700; color: var(--gold); letter-spacing: 0.15em; }
+  .blueprint-header p { color: rgba(201,168,76,0.5); font-size: 13px; font-style: italic; margin-top: 4px; }
+  .blueprint-canvas {
+    position: relative; width: 100%; aspect-ratio: 16/9;
+    background: rgba(26,10,0,0.5); border-radius: 8px; border: 1px solid rgba(180,83,9,0.2);
+    margin-bottom: 24px; overflow: hidden;
+  }
+  .blueprint-canvas svg { width: 100%; height: 100%; }
+  .bp-hotspot {
+    position: absolute; transform: translate(-50%, -50%); cursor: pointer;
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(201,168,76,0.5);
+    background: rgba(26,10,0,0.6); display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .bp-hotspot:hover, .bp-hotspot.active {
+    background: var(--gold); border-color: var(--gold-light);
+    box-shadow: 0 0 16px rgba(201,168,76,0.4);
+  }
+  .bp-hotspot .inner { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .bp-hotspot:hover .inner, .bp-hotspot.active .inner { background: var(--slate-900); }
+
+  .bp-detail {
+    background: rgba(26,10,0,0.5); border: 1px solid rgba(180,83,9,0.25);
+    border-radius: 8px; padding: 16px; margin-bottom: 16px;
+    animation: fadeSlide 0.3s ease;
+  }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .bp-detail h4 { color: var(--gold); font-weight: 600; font-size: 16px; }
+  .bp-detail p { color: rgba(201,168,76,0.6); font-size: 13px; line-height: 1.6; margin-top: 4px; }
+
+  .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .spec-card {
+    background: rgba(26,10,0,0.4); border: 1px solid rgba(180,83,9,0.15);
+    border-radius: 6px; padding: 12px; text-align: center; cursor: help; position: relative;
+  }
+  .spec-card .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(180,83,9,0.7); }
+  .spec-card .value { font-weight: 700; font-size: 14px; color: var(--gold); margin-top: 2px; }
+  .spec-card .tooltip {
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    margin-bottom: 8px; padding: 8px 12px; background: var(--slate-800); color: var(--slate-300);
+    font-size: 12px; border-radius: 6px; width: 200px; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 10;
+  }
+  .spec-card:hover .tooltip { opacity: 1; }
+
+  /* ── LAYER: INDUSTRIAL ── */
+  #industrial {
+    padding: 96px 24px;
+    background: linear-gradient(to bottom, var(--stone-900), var(--stone-800), var(--stone-900));
+  }
+  #industrial .gears {
+    position: absolute; inset: 0; opacity: 0.03;
+  }
+  .newspaper {
+    max-width: 720px; margin: 0 auto; background: #fdf6e3; color: #1c1917;
+    border-radius: 3px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); overflow: hidden;
+  }
+  .newspaper-head {
+    border-bottom: 4px double #1c1917; padding: 24px 24px 16px; text-align: center;
+  }
+  .newspaper-head .edition { font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: #78716c; }
+  .newspaper-head .masthead { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 900; letter-spacing: 0.08em; margin: 4px 0; }
+  .newspaper-head .date-line { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
+  .newspaper-head .date-line hr { flex: 1; border: none; border-top: 1px solid #d6d3d1; }
+  .newspaper-head .date-line span { font-size: 12px; color: #78716c; font-style: italic; }
+  .newspaper-headline {
+    padding: 16px 24px; border-bottom: 1px solid #e7e5e4; text-align: center;
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(0.9rem, 2vw, 1.15rem); line-height: 1.4;
+  }
+  .newspaper-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .newspaper-article {
+    padding: 20px; border-bottom: 1px solid #e7e5e4; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .newspaper-article:nth-child(odd) { border-right: 1px solid #e7e5e4; }
+  .newspaper-article:hover { background: rgba(251,191,36,0.08); }
+  .newspaper-article h5 {
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .newspaper-article h5 .pilcrow { font-size: 24px; color: #d6d3d1; font-weight: 900; line-height: 1; }
+  .newspaper-article .preview { font-size: 12px; color: #78716c; font-style: italic; margin-top: 6px; }
+  .newspaper-article .full-text {
+    font-family: 'Playfair Display', Georgia, serif; font-size: 13px; color: #57534e;
+    line-height: 1.65; margin-top: 8px; display: none;
+    animation: fadeSlide 0.3s ease;
+  }
+  .newspaper-article.expanded .full-text { display: block; }
+  .newspaper-article.expanded .preview { display: none; }
+  .newspaper-footer {
+    padding: 12px 24px; background: #f5f5f4; text-align: center;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #a8a29e;
+  }
+
+  /* ── LAYER: FUTURE ── */
+  #future {
+    padding: 96px 24px;
+    background: linear-gradient(to bottom, #020617, #0c1a3a, #020617);
+  }
+  #future .grid-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 1px 1px, rgba(59,130,246,0.08) 1px, transparent 0);
+    background-size: 40px 40px; opacity: 0.5;
+  }
+  #future .glow-bl { position: absolute; top: 33%; right: 25%; width: 256px; height: 256px; background: var(--blue); border-radius: 50%; filter: blur(160px); opacity: 0.07; }
+  #future .glow-cy { position: absolute; bottom: 33%; left: 25%; width: 192px; height: 192px; background: var(--cyan); border-radius: 50%; filter: blur(120px); opacity: 0.07; }
+
+  .guardian-core {
+    position: relative; max-width: 680px; margin: 0 auto; aspect-ratio: 1;
+    max-height: 560px;
+  }
+  .core-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .core-ring {
+    position: absolute; border-radius: 50%; border: 1px solid;
+  }
+  .core-ring-1 { width: 128px; height: 128px; border-color: rgba(59,130,246,0.2); animation: spinSlow 20s linear infinite; }
+  .core-ring-2 { width: 80px; height: 80px; border-color: rgba(34,211,238,0.25); animation: spinSlow 15s linear infinite reverse; }
+  .core-ring-3 { width: 256px; height: 256px; border-color: rgba(59,130,246,0.08); animation: spinSlow 30s linear infinite; }
+  .core-ring-4 { width: 380px; height: 380px; border-color: rgba(59,130,246,0.04); animation: spinSlow 40s linear infinite reverse; }
+  @keyframes spinSlow { to { transform: translate(-50%, -50%) rotate(360deg); } }
+  .core-orb {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    box-shadow: 0 0 30px rgba(59,130,246,0.5); display: flex; align-items: center; justify-content: center;
+  }
+  .core-orb-inner { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,0.8); }
+
+  .guardian-node {
+    position: absolute; transform: translate(-50%, -50%); cursor: pointer; z-index: 10;
+    transition: transform 0.2s;
+  }
+  .guardian-node:hover { transform: translate(-50%, -50%) scale(1.08); }
+  .node-card {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(59,130,246,0.15);
+    background: rgba(15,23,42,0.7); backdrop-filter: blur(8px); transition: all 0.3s;
+    min-width: 130px;
+  }
+  .guardian-node:hover .node-card,
+  .guardian-node.active .node-card {
+    background: rgba(59,130,246,0.15); border-color: var(--blue);
+    box-shadow: 0 0 24px rgba(59,130,246,0.25);
+  }
+  .node-card .icon { color: var(--blue); }
+  .guardian-node.active .node-card .icon { color: var(--cyan); }
+  .node-card .label { font-size: 12px; font-weight: 600; text-align: center; color: rgba(191,219,254,0.8); line-height: 1.3; }
+  .guardian-node.active .node-card .label { color: #fff; }
+
+  .node-detail-popup {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 280px; z-index: 20; background: rgba(15,23,42,0.95); border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 12px; padding: 20px; backdrop-filter: blur(12px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5); animation: fadeSlide 0.3s ease;
+  }
+  .node-detail-popup h4 { color: var(--cyan); font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+  .node-detail-popup p { color: var(--slate-300); font-size: 12px; line-height: 1.6; margin-bottom: 12px; }
+  .node-detail-popup ul { list-style: none; }
+  .node-detail-popup li {
+    font-size: 12px; color: rgba(191,219,254,0.7); padding: 2px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .node-detail-popup li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--cyan); flex-shrink: 0; }
+
+  /* ── CLOSING ── */
+  #closing {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(to bottom, #020617, var(--slate-900), var(--slate-800));
+  }
+  #closing .glow-bottom {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px; background: var(--gold); border-radius: 50%;
+    filter: blur(200px); opacity: 0.04;
+  }
+  .closing-text { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--slate-300); line-height: 1.7; max-width: 600px; margin: 0 auto 40px; }
+  .closing-avatars { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
+  .closing-avatar {
+    width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-weight: 700; font-size: 20px;
+    animation: glowPulse 3s infinite;
+  }
+  .closing-avatar.m { background: linear-gradient(135deg, #c9a84c, #b45309); color: var(--slate-900); }
+  .closing-avatar.s { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: #fff; animation-delay: 0.5s; }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.2); }
+    50% { box-shadow: 0 0 40px rgba(201,168,76,0.4); }
+  }
+  .closing-quote {
+    font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 700; font-style: italic; color: var(--gold); line-height: 1.4; max-width: 560px; margin: 0 auto 8px;
+  }
+  .closing-translation { font-size: 14px; color: var(--slate-400); font-style: italic; }
+
+  /* ── BROCHURE ── */
+  .brochure-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 90;
+    background: linear-gradient(90deg, #d97706, #b45309); color: var(--slate-900);
+    border: none; padding: 12px 20px; border-radius: 999px; font-weight: 600; font-size: 14px;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 8px 24px rgba(217,119,6,0.25); transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+  }
+  .brochure-btn:hover { box-shadow: 0 8px 32px rgba(217,119,6,0.4); transform: translateY(-2px); }
+  .brochure-btn svg { width: 20px; height: 20px; transition: transform 0.2s; }
+  .brochure-btn:hover svg { transform: rotate(8deg); }
+
+  .brochure-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .brochure-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .brochure-drawer {
+    position: fixed; right: 0; top: 0; height: 100%; width: 100%; max-width: 480px;
+    background: rgba(15,23,42,0.97); backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(51,65,85,0.5); z-index: 201;
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    overflow-y: auto;
+  }
+  .brochure-drawer.open { transform: translateX(0); }
+
+  .brochure-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px; position: sticky; top: 0; background: rgba(15,23,42,0.95);
+    backdrop-filter: blur(8px); z-index: 5;
+  }
+  .brochure-header h2 { font-size: 18px; font-weight: 700; }
+  .brochure-header p { font-size: 13px; color: var(--slate-400); margin-top: 2px; }
+  .brochure-close {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--slate-800);
+    border: none; color: var(--slate-400); cursor: pointer; display: flex;
+    align-items: center; justify-content: center; transition: all 0.2s;
+    font-size: 18px; font-family: 'Inter', sans-serif;
+  }
+  .brochure-close:hover { background: var(--slate-700); color: #fff; }
+
+  .brochure-content { padding: 0 24px 24px; }
+  .era-section { margin-bottom: 32px; }
+  .era-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .era-badge {
+    padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border-radius: 999px; border: 1px solid;
+  }
+  .era-badge-roma { background: rgba(26,10,0,0.6); color: var(--gold); border-color: rgba(180,83,9,0.4); }
+  .era-badge-industrial { background: rgba(41,37,36,0.6); color: #fb923c; border-color: rgba(251,146,60,0.3); }
+  .era-badge-future { background: rgba(2,6,23,0.6); color: var(--blue); border-color: rgba(59,130,246,0.3); }
+  .era-name { font-weight: 600; font-size: 14px; }
+  .era-period { font-size: 12px; color: #64748b; }
+
+  /* Flip cards */
+  .flip-card { perspective: 1000px; margin-bottom: 16px; cursor: pointer; }
+  .flip-card-inner {
+    position: relative; transition: transform 0.6s; transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card-front, .flip-card-back {
+    border-radius: 12px; padding: 20px; backface-visibility: hidden;
+    border: 1px solid;
+  }
+  .flip-card-back {
+    position: absolute; inset: 0; transform: rotateY(180deg); overflow-y: auto;
+  }
+  .flip-card-front .icon-box {
+    width: 48px; height: 48px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; margin-bottom: 12px;
+  }
+  .flip-card-front .hint { font-size: 12px; color: #64748b; font-style: italic; float: right; margin-top: -36px; }
+  .flip-card-front h4 { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+  .flip-card-front .subtitle { font-size: 13px; font-style: italic; margin-bottom: 8px; }
+  .flip-card-front .desc { font-size: 13px; color: var(--slate-300); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .flip-card-back h4 { font-weight: 700; font-size: 16px; margin-bottom: 16px; }
+  .flip-card-back .detail-item { margin-bottom: 12px; }
+  .flip-card-back .detail-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; }
+  .flip-card-back .detail-value { font-size: 13px; color: #e2e8f0; line-height: 1.5; margin-top: 2px; }
+  .flip-card-back .return-hint { font-size: 12px; color: #64748b; font-style: italic; margin-top: 16px; }
+
+  /* Roma cards */
+  .card-roma .flip-card-front, .card-roma .flip-card-back { background: rgba(26,10,0,0.4); border-color: rgba(180,83,9,0.2); }
+  .card-roma .flip-card-front:hover, .card-roma .flip-card-back:hover { border-color: rgba(201,168,76,0.4); }
+  .card-roma .icon-box { background: rgba(26,10,0,0.5); border: 1px solid rgba(180,83,9,0.2); }
+  .card-roma h4, .card-roma .icon-box svg { color: var(--gold); }
+  .card-roma .subtitle { color: rgba(201,168,76,0.5); }
+
+  /* Industrial cards */
+  .card-industrial .flip-card-front, .card-industrial .flip-card-back { background: rgba(41,37,36,0.4); border-color: rgba(251,146,60,0.2); }
+  .card-industrial .flip-card-front:hover { border-color: rgba(251,146,60,0.4); }
+  .card-industrial .icon-box { background: rgba(41,37,36,0.5); border: 1px solid rgba(251,146,60,0.2); }
+  .card-industrial h4, .card-industrial .icon-box svg { color: #fb923c; }
+  .card-industrial .subtitle { color: rgba(184,115,51,0.6); }
+
+  /* Future cards */
+  .card-future .flip-card-front, .card-future .flip-card-back { background: rgba(2,6,23,0.4); border-color: rgba(59,130,246,0.2); }
+  .card-future .flip-card-front:hover { border-color: rgba(59,130,246,0.4); }
+  .card-future .icon-box { background: rgba(2,6,23,0.5); border: 1px solid rgba(59,130,246,0.2); }
+  .card-future h4, .card-future .icon-box svg { color: var(--blue); }
+  .card-future .subtitle { color: rgba(59,130,246,0.5); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .timeline-nav { right: 12px; gap: 8px; }
+    .timeline-label { display: none; }
+    .newspaper-grid { grid-template-columns: 1fr; }
+    .newspaper-article:nth-child(odd) { border-right: none; }
+    .guardian-node { transform: translate(-50%, -50%) scale(0.85); }
+    .guardian-node:hover { transform: translate(-50%, -50%) scale(0.92); }
+    .brochure-btn span { display: none; }
+    .avatars { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ TIMELINE NAV ═══════════════ -->
+<nav class="timeline-nav" id="timelineNav">
+  <div class="rail"></div>
+  <div class="timeline-dot" data-era="present" data-target="present">
+    <span class="timeline-label">2026</span>
+  </div>
+  <div class="timeline-dot" data-era="roma" data-target="roma">
+    <span class="timeline-label">Roma</span>
+  </div>
+  <div class="timeline-dot" data-era="industrial" data-target="industrial">
+    <span class="timeline-label">1865</span>
+  </div>
+  <div class="timeline-dot" data-era="future" data-target="future">
+    <span class="timeline-label">2055</span>
+  </div>
+  <div class="timeline-dot" data-era="closing" data-target="closing">
+    <span class="timeline-label">Fine</span>
+  </div>
+</nav>
+
+<!-- ═══════════════ LAYER 1: PRESENT ═══════════════ -->
+<section id="present">
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+  <div style="position:relative;z-index:1;text-align:center;max-width:800px;margin:0 auto;padding:0 24px;">
+    <div class="fade-up">
+      <span class="badge badge-gold">18 Giugno 2026</span>
+    </div>
+    <h1 class="hero-title fade-up d1">Il Museo <span class="accent">Leonardo</span></h1>
+    <p class="hero-sub fade-up d2">Two young professionals step into the long corridor of the Leonardo Museum — a journey through millennia of innovation, creation, and the unrelenting will to build the future.</p>
+    <div class="avatars fade-up d3">
+      <div class="avatar-group">
+        <div class="avatar avatar-m">M</div>
+        <div class="avatar-info"><p>Marco</p><p>Systems Engineer</p></div>
+      </div>
+      <div class="divider-v"></div>
+      <div class="avatar-group">
+        <div class="avatar avatar-s">S</div>
+        <div class="avatar-info"><p>Sofia</p><p>Innovation Analyst</p></div>
+      </div>
+    </div>
+    <div class="scroll-cue fade-up d4">
+      <span>Begin the Journey</span>
+      <div class="scroll-pill"><div class="dot"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LAYER 2: ANCIENT ROMA ═══════════════ -->
+<section id="roma">
+  <div class="bg-lines"></div>
+  <div style="position:relative;z-index:1;max-width:960px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:8px;">
+      <span class="badge badge-amber">27 a.C. · Roma Antica</span>
+    </div>
+    <h2 class="section-title text-amber fade-up d1">Collegium Fabrorum Leonardvs</h2>
+    <p class="section-sub text-amber-dim fade-up d2">Ars ingenii ad securitatem futuri</p>
+    <p class="section-narrative fade-up d3" style="color:rgba(201,168,76,0.6);">In the heart of Imperial Rome, the Collegium Fabrorum Leonardvs serves the Pax Romana. Master engineers design the Ballistae Imperialis — siege engines of unprecedented precision. Every bolt, every torsion spring, every oak beam follows standards that will echo through two millennia.</p>
+
+    <div class="blueprint-container fade-up d4">
+      <div class="blueprint-header">
+        <h3>BALLISTAE IMPERIALIS</h3>
+        <p>Codex Fabrorum Leonardvs</p>
+      </div>
+      <div class="blueprint-canvas" id="blueprintCanvas">
+        <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="5" height="5" patternUnits="userSpaceOnUse">
+              <path d="M 5 0 L 0 0 0 5" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="100" height="80" fill="url(#grid)"/>
+          <line x1="15" y1="45" x2="85" y2="45" stroke="rgba(201,168,76,0.35)" stroke-width="0.8"/>
+          <line x1="20" y1="25" x2="20" y2="65" stroke="rgba(201,168,76,0.35)" stroke-width="0.8"/>
+          <rect x="18" y="30" width="60" height="30" rx="2" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
+          <path d="M 35 30 L 35 20 L 65 20 L 65 30" fill="none" stroke="rgba(201,168,76,0.5)" stroke-width="0.8"/>
+          <circle cx="35" cy="25" r="4" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.8"/>
+          <circle cx="65" cy="25" r="4" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.8"/>
+          <rect x="25" y="52" width="46" height="5" rx="1" fill="none" stroke="rgba(201,168,76,0.35)" stroke-width="0.6"/>
+          <circle cx="30" cy="60" r="3" fill="none" stroke="rgba(201,168,76,0.25)" stroke-width="0.6"/>
+          <line x1="30" y1="57" x2="30" y2="63" stroke="rgba(201,168,76,0.25)" stroke-width="0.5"/>
+        </svg>
+        <!-- Hotspots -->
+        <div class="bp-hotspot" style="left:20%;top:37%" data-bp="0"><div class="inner"></div></div>
+        <div class="bp-hotspot" style="left:45%;top:31%" data-bp="1"><div class="inner"></div></div>
+        <div class="bp-hotspot" style="left:65%;top:25%" data-bp="2"><div class="inner"></div></div>
+        <div class="bp-hotspot" style="left:50%;top:68%" data-bp="3"><div class="inner"></div></div>
+        <div class="bp-hotspot" style="left:30%;top:75%" data-bp="4"><div class="inner"></div></div>
+      </div>
+      <div id="bpDetail"></div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <div class="label">LATITUDO</div><div class="value">V PEDES</div>
+          <div class="tooltip">Width calibrated for optimal torsion distribution across the frame</div>
+        </div>
+        <div class="spec-card">
+          <div class="label">LONGITUDO</div><div class="value">IX PEDES</div>
+          <div class="tooltip">Length engineered for maximum projectile range at siege distances</div>
+        </div>
+        <div class="spec-card">
+          <div class="label">PONDUS</div><div class="value">DC LIBRAE</div>
+          <div class="tooltip">Weight balanced for field mobility while maintaining structural rigidity</div>
+        </div>
+        <div class="spec-card">
+          <div class="label">TORMENTUM</div><div class="value">NERVUS BOVIS</div>
+          <div class="tooltip">Sinew torsion springs delivering consistent kinetic energy per release cycle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LAYER 3: INDUSTRIAL ═══════════════ -->
+<section id="industrial">
+  <div style="position:relative;z-index:1;max-width:960px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:8px;">
+      <span class="badge badge-orange">1865 · Rivoluzione Industriale</span>
+    </div>
+    <h2 class="section-title text-orange fade-up d1">Officine Leonardo</h2>
+    <p class="section-sub fade-up d2" style="color:rgba(184,115,51,0.7);letter-spacing:0.25em;text-transform:uppercase;font-style:normal;">Ingegno · Lavoro · Futuro</p>
+    <p class="section-narrative fade-up d3" style="color:var(--slate-300);">On the banks of the Arno in Florence, steam rises from the Officine Leonardo. Here, the new Italy forges its industrial future — standardised components, heavy carpentry, and a workers' community that will become the blueprint for Italian manufacturing districts.</p>
+
+    <div class="newspaper fade-up d4">
+      <div class="newspaper-head">
+        <div class="edition">Edizione Straordinaria</div>
+        <div class="masthead">LA NAZIONE</div>
+        <div class="date-line"><hr><span>15 Settembre 1865</span><hr></div>
+      </div>
+      <div class="newspaper-headline">Le Officine Leonardo Inaugurano il Futuro Industriale della Nazione</div>
+      <div class="newspaper-grid" id="newspaperGrid">
+        <article class="newspaper-article" data-article="0">
+          <h5><span class="pilcrow">&sect;</span>La Macchina a Vapore</h5>
+          <p class="preview">Click to read...</p>
+          <p class="full-text">The heart of the Officine beats with Boulton & Watt precision. A 40-horsepower steam engine drives lathes, saws, and forging hammers through an intricate system of belts and pulleys. For the first time in Florence, raw materials enter one door and finished components emerge from another — standardised, interchangeable, and ready for assembly.</p>
+        </article>
+        <article class="newspaper-article" data-article="1">
+          <h5><span class="pilcrow">&sect;</span>Componenti Standard</h5>
+          <p class="preview">Click to read...</p>
+          <p class="full-text">Director Leonardo Mancini has decreed that every bolt, bracket, and bearing produced by the Officine must conform to a published specification table. 'A part made on Monday must fit with a part made on Friday, by a different hand, on a different lathe,' he declares. This is the birth of Italian industrial standardisation.</p>
+        </article>
+        <article class="newspaper-article" data-article="2">
+          <h5><span class="pilcrow">&sect;</span>Il Distretto Leonardo</h5>
+          <p class="preview">Click to read...</p>
+          <p class="full-text">Around the factory, a community grows. Row houses for workers. A school for their children. A cooperative canteen serving meals at cost. The Distretto Leonardo is not merely a factory — it is a social experiment, proving that industrial progress and human dignity can share the same blueprint.</p>
+        </article>
+        <article class="newspaper-article" data-article="3">
+          <h5><span class="pilcrow">&sect;</span>Carpenteria Pesante</h5>
+          <p class="preview">Click to read...</p>
+          <p class="full-text">The heavy carpentry division produces bridge trusses, rail wagons, and structural ironwork for the young nation's infrastructure. Each beam is tested to three times its rated load before leaving the yard. The Officine's stamp on a girder is a guarantee that it will stand for a century.</p>
+        </article>
+      </div>
+      <div class="newspaper-footer">Officine Leonardo · Lungarno · Firenze · Anno MDCCCLXV</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LAYER 4: FUTURE ═══════════════ -->
+<section id="future">
+  <div class="grid-bg"></div>
+  <div class="glow-bl"></div>
+  <div class="glow-cy"></div>
+  <div style="position:relative;z-index:1;max-width:960px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:8px;">
+      <span class="badge badge-blue">2055 · Il Futuro</span>
+    </div>
+    <h2 class="section-title fade-up d1" style="color:#fff;">EarthSphere Guardian Core</h2>
+    <p class="section-sub text-blue fade-up d2" style="letter-spacing:0.25em;text-transform:uppercase;font-style:normal;">Custodi del Pianeta</p>
+    <p class="section-narrative fade-up d3" style="color:var(--slate-300);">The corridor darkens. Holographic interfaces flicker to life. Welcome to Leonardo 2055 — a planetary-scale guardian network. From satellite constellations to quantum-encrypted communications, from lunar communities to algorithmic ethics, One Leonardo protects and sustains the world.</p>
+
+    <div class="guardian-core fade-up d4" id="guardianCore">
+      <!-- Center orb -->
+      <div class="core-center">
+        <div class="core-ring core-ring-1"></div>
+        <div class="core-ring core-ring-2"></div>
+        <div class="core-ring core-ring-3"></div>
+        <div class="core-ring core-ring-4"></div>
+        <div class="core-orb"><div class="core-orb-inner"></div></div>
+      </div>
+      <!-- Nodes -->
+      <div class="guardian-node" style="left:50%;top:6%;" data-node="0">
+        <div class="node-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M13 7L9 3 5 7l4 4M7 13l-4 4 4 4 4-4M21 13l-4-4-4 4 4 4M11 21l4-4 4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="label">Planetary Intelligence Network</div>
+        </div>
+      </div>
+      <div class="guardian-node" style="left:92%;top:46%;" data-node="1">
+        <div class="node-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="label">Planetary Resilience</div>
+        </div>
+      </div>
+      <div class="guardian-node" style="left:50%;top:88%;" data-node="2">
+        <div class="node-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M7.5 17.5L11 13M16.5 17.5L13 13" stroke-linecap="round"/><circle cx="12" cy="13" r="2"/></svg></div>
+          <div class="label">One Leonardo Organisation</div>
+        </div>
+      </div>
+      <div class="guardian-node" style="left:8%;top:46%;" data-node="3">
+        <div class="node-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></div>
+          <div class="label">Custodi del Pianeta</div>
+        </div>
+      </div>
+      <!-- Detail popup inserted here by JS -->
+      <div id="nodeDetail"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CLOSING ═══════════════ -->
+<section id="closing">
+  <div class="glow-bottom"></div>
+  <div style="position:relative;z-index:1;text-align:center;max-width:700px;margin:0 auto;padding:0 24px;">
+    <div class="fade-up">
+      <span class="badge badge-gold">18 Giugno 2026</span>
+    </div>
+    <p class="closing-text fade-up d1" style="margin-top:32px;">The corridor ends where it began. But the two young professionals who entered are not the same ones who now stand at the exit. They carry with them the weight of twenty centuries of innovation — and the courage and will to keep changing the world around us.</p>
+    <div class="closing-avatars fade-up d2">
+      <div class="closing-avatar m">M</div>
+      <div class="closing-avatar s">S</div>
+    </div>
+    <blockquote class="closing-quote fade-up d3">&ldquo;Il coraggio e la volontà di continuare a cambiare il mondo intorno a noi.&rdquo;</blockquote>
+    <p class="closing-translation fade-up d4">The courage and will to keep changing the world around us.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ BROCHURE BUTTON ═══════════════ -->
+<button class="brochure-btn" id="brochureBtn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5V5a2 2 0 0 1 2-2h14v14H6.5A2.5 2.5 0 0 0 4 19.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span>Oggetti della Memoria</span>
+</button>
+
+<!-- ═══════════════ BROCHURE DRAWER ═══════════════ -->
+<div class="brochure-overlay" id="brochureOverlay"></div>
+<div class="brochure-drawer" id="brochureDrawer">
+  <div class="brochure-header">
+    <div><h2>Oggetti della Memoria</h2><p>Memory artifacts across the ages</p></div>
+    <button class="brochure-close" id="brochureClose">&times;</button>
+  </div>
+  <div class="brochure-content">
+    <!-- Roma -->
+    <div class="era-section">
+      <div class="era-header">
+        <span class="era-badge era-badge-roma">27 a.C. – 476 d.C.</span>
+        <span class="era-name text-amber">Roma Antica</span>
+        <span class="era-period">— Pax Romana</span>
+      </div>
+      <div class="flip-card card-roma" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="hint">Click to reveal</span>
+            <h4>Sigillum Cerae</h4>
+            <p class="subtitle">The Wax Seal of Collegium Fabrorum</p>
+            <p class="desc">The official seal of the Collegium Fabrorum Leonardvs, pressed into warm beeswax on every contract and commission scroll. It bore the guild's motto — 'Ars ingenii ad securitatem futuri' — encircling a stylised ballista.</p>
+          </div>
+          <div class="flip-card-back">
+            <h4>Sigillum Cerae</h4>
+            <div class="detail-item"><div class="detail-label">Material</div><div class="detail-value">Beeswax & Bronze matrix</div></div>
+            <div class="detail-item"><div class="detail-label">Origin</div><div class="detail-value">Workshop of the Praefectus Fabrum, Rome</div></div>
+            <div class="detail-item"><div class="detail-label">Philosophy</div><div class="detail-value">Every mark binds the maker to mastery. Quality is not inspected in — it is sealed in.</div></div>
+            <p class="return-hint">Click to return</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card card-roma" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="hint">Click to reveal</span>
+            <h4>Codex Fabrorum / Ballista</h4>
+            <p class="subtitle">The Imperial Engineering Blueprint</p>
+            <p class="desc">A technical codex detailing the Ballistae Imperialis — the siege engine that defined Roman engineering supremacy. Drawn on papyrus with geometric precision, the blueprint specified every dimension.</p>
+          </div>
+          <div class="flip-card-back">
+            <h4>Codex Fabrorum / Ballista</h4>
+            <div class="detail-item"><div class="detail-label">Dimensions</div><div class="detail-value">Latitudo V Pedes × Longitudo IX Pedes</div></div>
+            <div class="detail-item"><div class="detail-label">Components</div><div class="detail-value">Torsion springs, calibrated tension ropes, oak & iron frame</div></div>
+            <div class="detail-item"><div class="detail-label">Philosophy</div><div class="detail-value">Standardise to scale. Engineer to endure. Document to teach.</div></div>
+            <p class="return-hint">Click to return</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Industrial -->
+    <div class="era-section">
+      <div class="era-header">
+        <span class="era-badge era-badge-industrial">1865</span>
+        <span class="era-name text-orange">Rivoluzione Industriale</span>
+        <span class="era-period">— Unità d'Italia</span>
+      </div>
+      <div class="flip-card card-industrial" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="hint">Click to reveal</span>
+            <h4>L'Emblema dell'Ingranaggio</h4>
+            <p class="subtitle">The Officine Leonardo Gear Emblem</p>
+            <p class="desc">The interlocking gear emblem of the Officine Leonardo, forged in cast iron and mounted above the factory gates on the banks of the Arno. Three meshing gears represented Ingegno, Lavoro, and Futuro.</p>
+          </div>
+          <div class="flip-card-back">
+            <h4>L'Emblema dell'Ingranaggio</h4>
+            <div class="detail-item"><div class="detail-label">Material</div><div class="detail-value">Cast iron, hand-finished</div></div>
+            <div class="detail-item"><div class="detail-label">Location</div><div class="detail-value">Officine Leonardo, Lungarno, Firenze</div></div>
+            <div class="detail-item"><div class="detail-label">Philosophy</div><div class="detail-value">The gear turns only when every tooth engages. Individual excellence, collective motion.</div></div>
+            <p class="return-hint">Click to return</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card card-industrial" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="hint">Click to reveal</span>
+            <h4>La Grande Adunanza</h4>
+            <p class="subtitle">The Recruitment Manifesto</p>
+            <p class="desc">A printed broadsheet distributed across Florence calling skilled artisans to join the Officine Leonardo. More than recruitment — it was a social contract promising housing, schooling, and cooperative living.</p>
+          </div>
+          <div class="flip-card-back">
+            <h4>La Grande Adunanza</h4>
+            <div class="detail-item"><div class="detail-label">Format</div><div class="detail-value">Letterpress broadsheet, 1865</div></div>
+            <div class="detail-item"><div class="detail-label">Reach</div><div class="detail-value">Distributed across Tuscany's artisan guilds</div></div>
+            <div class="detail-item"><div class="detail-label">Philosophy</div><div class="detail-value">Build the community that builds the future. The factory is a village; the village is a force.</div></div>
+            <p class="return-hint">Click to return</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Future -->
+    <div class="era-section">
+      <div class="era-header">
+        <span class="era-badge era-badge-future">2055</span>
+        <span class="era-name text-blue">Futuro 2055</span>
+        <span class="era-period">— Custodi del Pianeta</span>
+      </div>
+      <div class="flip-card card-future" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="hint">Click to reveal</span>
+            <h4>EarthSphere Guardian Core</h4>
+            <p class="subtitle">Holographic Interface Module</p>
+            <p class="desc">The central command interface of the EarthSphere Guardian Core — Leonardo's planetary-scale digital twin. This holographic module projects a real-time synthesis of satellite constellations, autonomous drone networks, and predictive AI.</p>
+          </div>
+          <div class="flip-card-back">
+            <h4>EarthSphere Guardian Core</h4>
+            <div class="detail-item"><div class="detail-label">Systems</div><div class="detail-value">Planetary Intelligence Network, Quantum Mesh, Algorithmic Ethics Engine</div></div>
+            <div class="detail-item"><div class="detail-label">Reach</div><div class="detail-value">Earth orbit to Lunar settlements, Megalopolises worldwide</div></div>
+            <div class="detail-item"><div class="detail-label">Philosophy</div><div class="detail-value">From swords to satellites, from factories to planetary guardians. The mission endures: protect, innovate, sustain.</div></div>
+            <p class="return-hint">Click to return</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── Scroll Reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15, rootMargin: '-5% 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Timeline Scroll Spy ──
+  const sections = ['present', 'roma', 'industrial', 'future', 'closing'];
+  const dots = document.querySelectorAll('.timeline-dot');
+
+  function updateTimeline() {
+    let active = sections[0];
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.5) active = id;
+    }
+    dots.forEach(d => {
+      d.classList.toggle('active', d.dataset.target === active);
+    });
+  }
+  window.addEventListener('scroll', updateTimeline, { passive: true });
+  updateTimeline();
+
+  dots.forEach(d => {
+    d.addEventListener('click', () => {
+      document.getElementById(d.dataset.target).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ── Blueprint Hotspots ──
+  const bpComponents = [
+    { name: 'Structura Lignea', desc: 'Oak and iron composite frame providing the rigid foundation for torsion mechanics.' },
+    { name: 'Tormentum', desc: 'Twisted sinew bundles storing and releasing mechanical energy with calibrated force.' },
+    { name: 'Bracchium', desc: 'Throwing arms carved from seasoned ash, transferring rotational energy to the projectile.' },
+    { name: 'Canalis', desc: 'Precision-grooved track guiding the projectile for accurate trajectory alignment.' },
+    { name: 'Sucula', desc: 'Ratcheted winch mechanism enabling controlled loading by a two-man crew.' },
+  ];
+  let activeBp = null;
+  document.querySelectorAll('.bp-hotspot').forEach(h => {
+    h.addEventListener('click', () => {
+      const idx = parseInt(h.dataset.bp);
+      const detail = document.getElementById('bpDetail');
+      if (activeBp === idx) {
+        activeBp = null;
+        detail.innerHTML = '';
+        h.classList.remove('active');
+        return;
+      }
+      document.querySelectorAll('.bp-hotspot').forEach(x => x.classList.remove('active'));
+      h.classList.add('active');
+      activeBp = idx;
+      const c = bpComponents[idx];
+      detail.innerHTML = '<div class="bp-detail"><h4>' + c.name + '</h4><p>' + c.desc + '</p></div>';
+    });
+  });
+
+  // ── Newspaper Articles ──
+  document.querySelectorAll('.newspaper-article').forEach(a => {
+    a.addEventListener('click', () => {
+      const wasExpanded = a.classList.contains('expanded');
+      document.querySelectorAll('.newspaper-article').forEach(x => x.classList.remove('expanded'));
+      if (!wasExpanded) a.classList.add('expanded');
+    });
+  });
+
+  // ── Guardian Core Nodes ──
+  const nodeData = [
+    { name: 'Planetary Intelligence Network', desc: 'A mesh of orbital sensors, autonomous drones, and AI-driven analysis providing real-time planetary awareness.', items: ['Satellite Constellations', 'Autonomous Drone Swarms', 'Cyber Defence Grid', 'Predictive AI Engine'] },
+    { name: 'Planetary Resilience', desc: 'Leonardo engineers the infrastructure for lunar settlements and protects Earth\'s megalopolises with adaptive systems.', items: ['Lunar Community Infrastructure', 'Megalopolis Defence Systems', 'Climate Adaptation Networks', 'Resource Distribution AI'] },
+    { name: 'One Leonardo Organisation', desc: 'A single organisation operating as one digital model — distributed across continents, unified in purpose.', items: ['Distributed Global Network', 'Single Digital Model', 'Unified Command Architecture', 'Cross-Domain Integration'] },
+    { name: 'Custodi del Pianeta', desc: 'Quantum networks enable instantaneous coordination. Algorithmic ethics ensure every decision serves humanity.', items: ['Predictive Simulation Engine', 'Quantum Communication Networks', 'Algorithmic Ethics Framework', 'Planetary Early Warning System'] },
+  ];
+  let activeNode = null;
+  document.querySelectorAll('.guardian-node').forEach(n => {
+    n.addEventListener('click', () => {
+      const idx = parseInt(n.dataset.node);
+      const detail = document.getElementById('nodeDetail');
+      if (activeNode === idx) {
+        activeNode = null;
+        detail.innerHTML = '';
+        n.classList.remove('active');
+        return;
+      }
+      document.querySelectorAll('.guardian-node').forEach(x => x.classList.remove('active'));
+      n.classList.add('active');
+      activeNode = idx;
+      const d = nodeData[idx];
+      detail.innerHTML = '<div class="node-detail-popup"><h4>' + d.name + '</h4><p>' + d.desc + '</p><ul>' +
+        d.items.map(i => '<li>' + i + '</li>').join('') + '</ul></div>';
+    });
+  });
+
+  // ── Brochure ──
+  const btn = document.getElementById('brochureBtn');
+  const overlay = document.getElementById('brochureOverlay');
+  const drawer = document.getElementById('brochureDrawer');
+  const close = document.getElementById('brochureClose');
+
+  function openBrochure() { overlay.classList.add('open'); drawer.classList.add('open'); }
+  function closeBrochure() { overlay.classList.remove('open'); drawer.classList.remove('open'); }
+
+  btn.addEventListener('click', openBrochure);
+  overlay.addEventListener('click', closeBrochure);
+  close.addEventListener('click', closeBrochure);
+})();
+</script>
+</body>
+</html>
