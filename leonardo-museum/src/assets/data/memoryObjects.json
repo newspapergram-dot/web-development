@@ -1,0 +1,83 @@
+{
+  "eras": [
+    {
+      "id": "ancient-roma",
+      "name": "Roma Antica",
+      "year": "27 a.C. – 476 d.C.",
+      "period": "Pax Romana",
+      "objects": [
+        {
+          "id": "wax-seal",
+          "title": "Sigillum Cerae",
+          "subtitle": "The Wax Seal of Collegium Fabrorum",
+          "description": "The official seal of the Collegium Fabrorum Leonardvs, pressed into warm beeswax on every contract and commission scroll. It bore the guild's motto — 'Ars ingenii ad securitatem futuri' — encircling a stylised ballista, symbol of engineering excellence in service of Roman security. The seal guaranteed that the work met the Collegium's exacting standards of craftsmanship and that the artisan stood behind it with personal honour.",
+          "details": {
+            "material": "Beeswax & Bronze matrix",
+            "origin": "Workshop of the Praefectus Fabrum, Rome",
+            "philosophy": "Every mark binds the maker to mastery. Quality is not inspected in — it is sealed in."
+          }
+        },
+        {
+          "id": "codex-ballista",
+          "title": "Codex Fabrorum / Ballista",
+          "subtitle": "The Imperial Engineering Blueprint",
+          "description": "A technical codex detailing the Ballistae Imperialis — the siege engine that defined Roman engineering supremacy. Drawn on papyrus with geometric precision, the blueprint specified every dimension: LATITUDO V PEDES, LONGITUDO IX PEDES. It codified the Collegium's approach to defence engineering: modular components, standardised tolerances, and field-repairable assemblies. The codex was Rome's first 'technical data package'.",
+          "details": {
+            "dimensions": "Latitudo V Pedes × Longitudo IX Pedes",
+            "components": "Torsion springs, calibrated tension ropes, oak & iron frame",
+            "philosophy": "Standardise to scale. Engineer to endure. Document to teach."
+          }
+        }
+      ]
+    },
+    {
+      "id": "industrial-revolution",
+      "name": "Rivoluzione Industriale",
+      "year": "1865",
+      "period": "Unità d'Italia",
+      "objects": [
+        {
+          "id": "gear-emblem",
+          "title": "L'Emblema dell'Ingranaggio",
+          "subtitle": "The Officine Leonardo Gear Emblem",
+          "description": "The interlocking gear emblem of the Officine Leonardo, forged in cast iron and mounted above the factory gates on the banks of the Arno in Florence. Three meshing gears represented the company's founding trinity: Ingegno (Ingenuity), Lavoro (Labour), and Futuro (Future). Every worker who passed beneath it entered a covenant — individual skill multiplied by collective purpose.",
+          "details": {
+            "material": "Cast iron, hand-finished",
+            "location": "Officine Leonardo, Lungarno, Firenze",
+            "philosophy": "The gear turns only when every tooth engages. Individual excellence, collective motion."
+          }
+        },
+        {
+          "id": "grande-adunanza",
+          "title": "La Grande Adunanza",
+          "subtitle": "The Recruitment Manifesto",
+          "description": "A printed broadsheet distributed across Florence calling skilled artisans — carpenters, blacksmiths, steam engineers — to join the Officine Leonardo. More than a recruitment poster, it was a social contract: the Distretto Leonardo promised housing, schooling for workers' children, and a cooperative canteen. It declared that innovation without community is mere invention, and that the factory's true product was not machines but a new way of working together.",
+          "details": {
+            "format": "Letterpress broadsheet, 1865",
+            "reach": "Distributed across Tuscany's artisan guilds",
+            "philosophy": "Build the community that builds the future. The factory is a village; the village is a force."
+          }
+        }
+      ]
+    },
+    {
+      "id": "future-2055",
+      "name": "Futuro 2055",
+      "year": "2055",
+      "period": "Custodi del Pianeta",
+      "objects": [
+        {
+          "id": "earthsphere-module",
+          "title": "EarthSphere Guardian Core",
+          "subtitle": "Holographic Interface Module",
+          "description": "The central command interface of the EarthSphere Guardian Core — Leonardo's planetary-scale digital twin. This holographic module projects a real-time synthesis of satellite constellations, autonomous drone networks, cyber-defence grids, and predictive AI. It is the nerve centre from which the Custodi del Pianeta monitor, simulate, and protect Earth's ecosystems, cities, and lunar communities. The interface embodies 'One Leonardo' — a single, distributed organisation operating as one digital model.",
+          "details": {
+            "systems": "Planetary Intelligence Network, Quantum Mesh, Algorithmic Ethics Engine",
+            "reach": "Earth orbit to Lunar settlements, Megalopolises worldwide",
+            "philosophy": "From swords to satellites, from factories to planetary guardians. The mission endures: protect, innovate, sustain."
+          }
+        }
+      ]
+    }
+  ]
+}

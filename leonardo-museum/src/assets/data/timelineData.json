@@ -1,0 +1,139 @@
+{
+  "layers": [
+    {
+      "id": "present-2026",
+      "era": "The Present",
+      "year": "2026",
+      "date": "18 Giugno 2026",
+      "title": "Il Museo Leonardo",
+      "subtitle": "Where past and future converge",
+      "narrative": "Two young professionals step into the long corridor of the Leonardo Museum. Before them stretches a journey through millennia — a living testament to humanity's capacity to innovate, create value, and build the future.",
+      "theme": {
+        "primary": "#0f172a",
+        "accent": "#c9a84c",
+        "gradient": "from-slate-900 via-slate-800 to-slate-900"
+      }
+    },
+    {
+      "id": "ancient-roma",
+      "era": "Roma Antica",
+      "year": "27 a.C.",
+      "title": "Collegium Fabrorum Leonardvs",
+      "subtitle": "Ars ingenii ad securitatem futuri",
+      "narrative": "In the heart of Imperial Rome, the Collegium Fabrorum Leonardvs serves the Pax Romana. Master engineers design the Ballistae Imperialis — siege engines of unprecedented precision. Every bolt, every torsion spring, every oak beam follows standards that will echo through two millennia.",
+      "blueprint": {
+        "name": "BALLISTAE IMPERIALIS",
+        "specs": [
+          { "label": "LATITUDO", "value": "V PEDES", "detail": "Width calibrated for optimal torsion distribution across the frame" },
+          { "label": "LONGITUDO", "value": "IX PEDES", "detail": "Length engineered for maximum projectile range at siege distances" },
+          { "label": "PONDUS", "value": "DC LIBRAE", "detail": "Weight balanced for field mobility while maintaining structural rigidity" },
+          { "label": "TORMENTUM", "value": "NERVUS BOVIS", "detail": "Sinew torsion springs delivering consistent kinetic energy per release cycle" }
+        ],
+        "components": [
+          { "id": "frame", "name": "Structura Lignea", "x": 20, "y": 30, "description": "Oak and iron composite frame providing the rigid foundation for torsion mechanics" },
+          { "id": "torsion", "name": "Tormentum", "x": 45, "y": 25, "description": "Twisted sinew bundles storing and releasing mechanical energy with calibrated force" },
+          { "id": "arm", "name": "Bracchium", "x": 65, "y": 20, "description": "Throwing arms carved from seasoned ash, transferring rotational energy to the projectile" },
+          { "id": "slider", "name": "Canalis", "x": 50, "y": 55, "description": "Precision-grooved track guiding the projectile for accurate trajectory alignment" },
+          { "id": "winch", "name": "Sucula", "x": 30, "y": 60, "description": "Ratcheted winch mechanism enabling controlled loading by a two-man crew" }
+        ]
+      },
+      "theme": {
+        "primary": "#1a0a00",
+        "accent": "#c9a84c",
+        "gradient": "from-amber-950 via-stone-900 to-amber-950"
+      }
+    },
+    {
+      "id": "industrial-1865",
+      "era": "Rivoluzione Industriale",
+      "year": "1865",
+      "title": "Officine Leonardo",
+      "subtitle": "Ingegno · Lavoro · Futuro",
+      "narrative": "On the banks of the Arno in Florence, steam rises from the Officine Leonardo. Here, the new Italy forges its industrial future — standardised components, heavy carpentry, and a workers' community that will become the blueprint for Italian manufacturing districts.",
+      "newspaper": {
+        "masthead": "LA NAZIONE",
+        "edition": "Edizione Straordinaria",
+        "date": "15 Settembre 1865",
+        "headline": "Le Officine Leonardo Inaugurano il Futuro Industriale della Nazione",
+        "articles": [
+          {
+            "title": "La Macchina a Vapore",
+            "content": "The heart of the Officine beats with Boulton & Watt precision. A 40-horsepower steam engine drives lathes, saws, and forging hammers through an intricate system of belts and pulleys. For the first time in Florence, raw materials enter one door and finished components emerge from another — standardised, interchangeable, and ready for assembly."
+          },
+          {
+            "title": "Componenti Standard",
+            "content": "Director Leonardo Mancini has decreed that every bolt, bracket, and bearing produced by the Officine must conform to a published specification table. 'A part made on Monday must fit with a part made on Friday, by a different hand, on a different lathe,' he declares. This is the birth of Italian industrial standardisation."
+          },
+          {
+            "title": "Il Distretto Leonardo",
+            "content": "Around the factory, a community grows. Row houses for workers. A school for their children. A cooperative canteen serving meals at cost. The Distretto Leonardo is not merely a factory — it is a social experiment, proving that industrial progress and human dignity can share the same blueprint."
+          },
+          {
+            "title": "Carpenteria Pesante",
+            "content": "The heavy carpentry division produces bridge trusses, rail wagons, and structural ironwork for the young nation's infrastructure. Each beam is tested to three times its rated load before leaving the yard. The Officine's stamp on a girder is a guarantee that it will stand for a century."
+          }
+        ]
+      },
+      "theme": {
+        "primary": "#1c1917",
+        "accent": "#b87333",
+        "gradient": "from-stone-900 via-stone-800 to-stone-900"
+      }
+    },
+    {
+      "id": "future-2055",
+      "era": "Il Futuro",
+      "year": "2055",
+      "title": "EarthSphere Guardian Core",
+      "subtitle": "Custodi del Pianeta",
+      "narrative": "The corridor darkens. Holographic interfaces flicker to life. Welcome to Leonardo 2055 — a planetary-scale guardian network. From satellite constellations to quantum-encrypted communications, from lunar communities to algorithmic ethics, One Leonardo protects and sustains the world.",
+      "guardianCore": {
+        "nodes": [
+          {
+            "id": "planetary-intelligence",
+            "name": "Planetary Intelligence Network",
+            "icon": "satellite",
+            "items": ["Satellite Constellations", "Autonomous Drone Swarms", "Cyber Defence Grid", "Predictive AI Engine"],
+            "description": "A mesh of orbital sensors, autonomous drones, and AI-driven analysis providing real-time planetary awareness. Every data point feeds the Guardian Core's predictive models.",
+            "angle": 0
+          },
+          {
+            "id": "planetary-resilience",
+            "name": "Planetary Resilience",
+            "icon": "shield",
+            "items": ["Lunar Community Infrastructure", "Megalopolis Defence Systems", "Climate Adaptation Networks", "Resource Distribution AI"],
+            "description": "New markets, new frontiers. Leonardo engineers the infrastructure for lunar settlements and protects Earth's growing megalopolises with adaptive, self-healing systems.",
+            "angle": 90
+          },
+          {
+            "id": "one-leonardo",
+            "name": "One Leonardo Organisation",
+            "icon": "network",
+            "items": ["Distributed Global Network", "Single Digital Model", "Unified Command Architecture", "Cross-Domain Integration"],
+            "description": "A single organisation operating as one digital model — distributed across continents, unified in purpose. Every division, every team, every individual connected through a seamless digital fabric.",
+            "angle": 180
+          },
+          {
+            "id": "custodi",
+            "name": "Custodi del Pianeta",
+            "icon": "globe",
+            "items": ["Predictive Simulation Engine", "Quantum Communication Networks", "Algorithmic Ethics Framework", "Planetary Early Warning System"],
+            "description": "The ultimate mission: planetary guardianship. Quantum networks enable instantaneous coordination. Algorithmic ethics ensure every decision serves humanity. Predictive simulations model tomorrow before it arrives.",
+            "angle": 270
+          }
+        ]
+      },
+      "theme": {
+        "primary": "#020617",
+        "accent": "#3b82f6",
+        "gradient": "from-slate-950 via-blue-950 to-slate-950"
+      }
+    }
+  ],
+  "closing": {
+    "date": "18 Giugno 2026",
+    "message": "The corridor ends where it began. But the two young professionals who entered are not the same ones who now stand at the exit. They carry with them the weight of twenty centuries of innovation — and the courage and will to keep changing the world around us.",
+    "cta": "Il coraggio e la volontà di continuare a cambiare il mondo intorno a noi.",
+    "ctaEnglish": "The courage and will to keep changing the world around us."
+  }
+}
