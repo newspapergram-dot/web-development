@@ -8,10 +8,6 @@ interface IndustrialRoomProps {
   readonly room: Room;
 }
 
-/**
- * Room 2 — Officine Leonardo (Industrial Revolution, 1865). Heavy mechanical
- * aesthetic with a dynamic, interactive "La Nazione" archive.
- */
 export function IndustrialRoom({ room }: IndustrialRoomProps) {
   const builder = useMemo(() => buildOfficineScene(room.theme.accent), [room.theme.accent]);
   const feature = room.feature;
@@ -26,15 +22,16 @@ export function IndustrialRoom({ room }: IndustrialRoomProps) {
 
   return (
     <RoomChrome room={room}>
-      <div className="officine">
+      <div className="officine officine--centered">
         <Stage3D
           builder={builder}
           options={{ cameraZ: 6, fov: 55 }}
-          caption="Three interlocking steam-era gears turning in mesh — Ingegno, Lavoro, Futuro."
-          className="officine__stage"
+          caption="Tre ingranaggi a vapore interconnessi che ruotano in sincronia — Ingegno, Lavoro, Futuro."
+          className="officine__bg-stage"
         />
 
-        <section className="gazette" aria-label="La Nazione archive">
+        <section className="gazette gazette--central" aria-label="Archivio La Nazione">
+          <div className="gazette__oggetto-label" aria-hidden="true">Oggetto della Memoria</div>
           <header className="gazette__masthead">
             <p className="gazette__edition">{archive.edition}</p>
             <h3 className="gazette__title">{archive.masthead}</h3>

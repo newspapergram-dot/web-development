@@ -1,5 +1,5 @@
 /* =========================================================================
-   MoLE — Museum of Leonardo Evolution · design system
+   MoLE — Museo dell'Evoluzione Leonardo · design system
    Per-room theming via CSS custom properties set on .museum at runtime.
    ========================================================================= */
 
@@ -44,6 +44,24 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ---- 3D Room Transition Canvas ---------------------------------------- */
+
+.transition-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.transition-canvas--active {
+  pointer-events: all;
+  opacity: 1;
 }
 
 /* ---- Shell ------------------------------------------------------------- */
@@ -167,6 +185,12 @@ body {
   color: var(--ink);
   border-color: var(--accent);
   background: var(--accent-soft);
+}
+
+.rail__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .rail__index {
@@ -520,17 +544,76 @@ body {
   color: var(--ink-faint);
 }
 
-/* ---- Room 2 · Officine + Gazette -------------------------------------- */
+/* ---- Room 2 · Officine + Gazette (La Nazione central) ------------------- */
 
-.officine {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 1.6rem;
-  align-items: start;
+.officine--centered {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 
-.officine__stage .stage3d__canvas {
-  height: 460px;
+.officine__bg-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.2;
+  border: none;
+  pointer-events: none;
+}
+
+.officine__bg-stage .stage3d__canvas {
+  height: 100%;
+  min-height: 600px;
+}
+
+.officine__bg-stage .stage3d__caption {
+  display: none;
+}
+
+.gazette--central {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 2rem 2.2rem;
+  background:
+    linear-gradient(180deg, rgba(28, 22, 16, 0.92), rgba(14, 10, 6, 0.95));
+  box-shadow:
+    0 0 60px rgba(192, 116, 58, 0.15),
+    0 0 120px rgba(192, 116, 58, 0.08),
+    inset 0 0 80px rgba(0, 0, 0, 0.4);
+  transform: perspective(800px) rotateX(1deg);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.gazette--central:hover {
+  transform: perspective(800px) rotateX(0deg) scale(1.01);
+  box-shadow:
+    0 0 80px rgba(192, 116, 58, 0.25),
+    0 0 160px rgba(192, 116, 58, 0.12),
+    inset 0 0 80px rgba(0, 0, 0, 0.3);
+}
+
+.gazette__oggetto-label {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--bg);
+  padding: 0.2rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
 .gazette {
@@ -887,9 +970,13 @@ body {
   }
 
   .blueprint,
-  .officine,
   .guardian {
     grid-template-columns: 1fr;
+  }
+
+  .gazette--central {
+    max-width: 100%;
+    padding: 1.4rem 1.2rem;
   }
 }
 
@@ -898,5 +985,13 @@ body {
   .nodes,
   .node-detail__items {
     grid-template-columns: 1fr;
+  }
+
+  .gazette--central {
+    transform: none;
+  }
+
+  .gazette--central:hover {
+    transform: none;
   }
 }

@@ -6,13 +6,12 @@ interface RoomChromeProps {
   readonly children: ReactNode;
 }
 
-/** Consistent header + narrative scaffold shared by every room. */
 export function RoomChrome({ room, children }: RoomChromeProps) {
   return (
     <div className="room__inner">
       <header className="room__header">
         <p className="room__eyebrow">
-          <span className="room__index">Room {room.index}</span>
+          <span className="room__index">Sala {room.index}</span>
           <span aria-hidden="true">·</span>
           <span>{room.year}</span>
           <span aria-hidden="true">·</span>

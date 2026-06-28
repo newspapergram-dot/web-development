@@ -8,10 +8,6 @@ interface EntranceRoomProps {
   readonly room: Room;
 }
 
-/**
- * Room 0 — Il Portale (Present, 2026). A luminous particle tunnel where words in
- * many languages converge on a single motto: "Technology for a safer future".
- */
 export function EntranceRoom({ room }: EntranceRoomProps) {
   const builder = useMemo(() => buildPortalScene(room.theme.accent), [room.theme.accent]);
   const feature = room.feature;
@@ -25,11 +21,11 @@ export function EntranceRoom({ room }: EntranceRoomProps) {
       <Stage3D
         builder={builder}
         options={{ cameraZ: 4, fov: 70 }}
-        caption="A luminous particle tunnel streaming toward the visitor — the corridor of time."
+        caption="Un tunnel luminoso di particelle che scorre verso il visitatore — il corridoio del tempo."
       />
 
       <div className="portal">
-        <ul className="portal__languages" aria-label="The word 'technology' converging across languages and alphabets">
+        <ul className="portal__languages" aria-label="La parola 'tecnologia' converge attraverso lingue e alfabeti">
           {feature.languages.map((word, index) => (
             <li
               key={word}
@@ -41,13 +37,13 @@ export function EntranceRoom({ room }: EntranceRoomProps) {
           ))}
         </ul>
         <p className="portal__motto">
-          <span aria-hidden="true">“</span>
+          <span aria-hidden="true">&ldquo;</span>
           {feature.motto}
-          <span aria-hidden="true">”</span>
+          <span aria-hidden="true">&rdquo;</span>
         </p>
         <p className="portal__lead">
-          Two young professionals enter the corridor. The core identity of Leonardo endures across
-          every era: the capacity to <strong>innovate</strong> and <strong>create value</strong>.
+          Due giovani professionisti entrano nel corridoio. L&apos;identità fondamentale di Leonardo
+          perdura in ogni epoca: la capacità di <strong>innovare</strong> e <strong>creare valore</strong>.
         </p>
       </div>
     </RoomChrome>

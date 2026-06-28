@@ -9,11 +9,6 @@ interface RomeRoomProps {
   readonly room: Room;
 }
 
-/**
- * Room 1 — Le Fondamenta (Ancient Rome, Leonardvs). Showcases the BALLISTAE
- * IMPERIALIS blueprint as an animated 3D object, overlaid with hot-spots that
- * map its technical data.
- */
 export function RomeRoom({ room }: RomeRoomProps) {
   const builder = useMemo(() => buildBallistaScene(room.theme.accent), [room.theme.accent]);
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
@@ -33,9 +28,9 @@ export function RomeRoom({ room }: RomeRoomProps) {
           <Stage3D
             builder={builder}
             options={{ cameraZ: 6.5, fov: 50 }}
-            caption="A rotating reconstruction of the Ballistae Imperialis, its torsion arms loading and releasing."
+            caption="Una ricostruzione rotante della Ballistae Imperialis, con le braccia di torsione che caricano e rilasciano."
           />
-          <div className="blueprint__hotspots" role="group" aria-label="Ballistae Imperialis components">
+          <div className="blueprint__hotspots" role="group" aria-label="Componenti della Ballistae Imperialis">
             {blueprint.hotspots.map((hotspot) => (
               <Hotspot
                 key={hotspot.id}
@@ -59,7 +54,7 @@ export function RomeRoom({ room }: RomeRoomProps) {
               </>
             ) : (
               <p className="blueprint__readout-text blueprint__readout-text--muted">
-                Hover or select a hot-spot to inspect each component of the torsion engine.
+                Passa il mouse o seleziona un punto interattivo per ispezionare ogni componente del motore di torsione.
               </p>
             )}
           </div>

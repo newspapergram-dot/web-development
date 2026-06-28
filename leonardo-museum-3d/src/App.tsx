@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { EntranceRoom } from './rooms/EntranceRoom';
 import { RomeRoom } from './rooms/RomeRoom';
@@ -12,6 +12,7 @@ import {
   ROOMS,
 } from './data/museum';
 import type { Room, RoomId } from './types';
+import { runCorridorTransition } from './three/transition';
 
 function renderRoom(room: Room) {
   switch (room.id) {
@@ -30,16 +31,53 @@ function renderRoom(room: Room) {
 
 export default function App() {
   const [currentId, setCurrentId] = useState<RoomId>(ROOMS[0].id);
+  const [transitioning, setTransitioning] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const disposeRef = useRef<(() => void) | null>(null);
 
   const currentRoom = useMemo(
     () => ROOMS.find((room) => room.id === currentId) ?? ROOMS[0],
     [currentId],
   );
 
+  const navigateTo = useCallback((targetId: RoomId) => {
+    if (transitioning) return;
+    const fromRoom = ROOMS.find((r) => r.id === currentId) ?? ROOMS[0];
+    const toRoom = ROOMS.find((r) => r.id === targetId) ?? ROOMS[0];
+    if (fromRoom.id === toRoom.id) return;
+
+    setTransitioning(true);
+
+    requestAnimationFrame(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        setCurrentId(targetId);
+        setTransitioning(false);
+        return;
+      }
+
+      disposeRef.current = runCorridorTransition({
+        canvas,
+        fromColor: fromRoom.theme.background,
+        toColor: toRoom.theme.background,
+        onComplete: () => {
+          setCurrentId(targetId);
+          setTimeout(() => setTransitioning(false), 100);
+        },
+      });
+    });
+  }, [currentId, transitioning]);
+
+  useEffect(() => {
+    return () => {
+      disposeRef.current?.();
+    };
+  }, []);
+
   const goToIndex = useCallback((index: number) => {
     const next = ROOMS[(index + ROOMS.length) % ROOMS.length];
-    setCurrentId(next.id);
-  }, []);
+    navigateTo(next.id);
+  }, [navigateTo]);
 
   const themeStyle = {
     '--accent': currentRoom.theme.accent,
@@ -50,8 +88,14 @@ export default function App() {
   return (
     <div className="museum" data-theme={currentRoom.theme.key} style={themeStyle}>
       <a className="skip-link" href="#room-main">
-        Skip to current room
+        Vai alla sala corrente
       </a>
+
+      <canvas
+        ref={canvasRef}
+        className={`transition-canvas ${transitioning ? 'transition-canvas--active' : ''}`}
+        aria-hidden="true"
+      />
 
       <header className="masthead">
         <div className="masthead__brand">
@@ -61,7 +105,7 @@ export default function App() {
         <p className="masthead__motto">{MUSEUM_MOTTO}</p>
       </header>
 
-      <nav className="rail" aria-label="Museum rooms">
+      <nav className="rail" aria-label="Sale del museo">
         <ol className="rail__list">
           {ROOMS.map((room) => {
             const active = room.id === currentRoom.id;
@@ -72,7 +116,8 @@ export default function App() {
                   className="rail__button"
                   data-state={active ? 'active' : 'idle'}
                   aria-current={active ? 'step' : undefined}
-                  onClick={() => setCurrentId(room.id)}
+                  disabled={transitioning}
+                  onClick={() => navigateTo(room.id)}
                 >
                   <span className="rail__index">{String(room.index).padStart(2, '0')}</span>
                   <span className="rail__meta">
@@ -92,10 +137,10 @@ export default function App() {
             key={currentRoom.id}
             className="room"
             aria-label={`${currentRoom.title}, ${currentRoom.era}`}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -24 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.04 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             {renderRoom(currentRoom)}
           </motion.section>
@@ -106,9 +151,9 @@ export default function App() {
             type="button"
             className="pager__button"
             onClick={() => goToIndex(currentRoom.index - 1)}
-            disabled={currentRoom.index === 0}
+            disabled={currentRoom.index === 0 || transitioning}
           >
-            ← Previous room
+            ← Sala precedente
           </button>
           <span className="pager__progress" aria-hidden="true">
             {currentRoom.index + 1} / {ROOMS.length}
@@ -117,9 +162,9 @@ export default function App() {
             type="button"
             className="pager__button"
             onClick={() => goToIndex(currentRoom.index + 1)}
-            disabled={currentRoom.index === ROOMS.length - 1}
+            disabled={currentRoom.index === ROOMS.length - 1 || transitioning}
           >
-            Next room →
+            Sala successiva →
           </button>
         </div>
 

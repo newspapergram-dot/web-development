@@ -8,11 +8,6 @@ interface FutureRoomProps {
   readonly room: Room;
 }
 
-/**
- * Room 3 — EarthSphere Guardian Core (Future, 2055). An active holographic
- * interface wrapper with four interactive sub-nodes mapping the Guardian Core's
- * domains.
- */
 export function FutureRoom({ room }: FutureRoomProps) {
   const builder = useMemo(() => buildGuardianScene(room.theme.accent), [room.theme.accent]);
   const feature = room.feature;
@@ -33,18 +28,18 @@ export function FutureRoom({ room }: FutureRoomProps) {
           <Stage3D
             builder={builder}
             options={{ cameraZ: 6, fov: 55 }}
-            caption="A holographic wireframe digital twin of Earth, orbited by four pulsing guardian nodes."
+            caption="Un gemello digitale olografico wireframe della Terra, orbitato da quattro nodi guardiani pulsanti."
           />
           <p className="guardian__designation" aria-hidden="true">
             {core.designation}
           </p>
           <span className="guardian__status">
-            <span className="guardian__status-dot" aria-hidden="true" /> SYSTEM ONLINE · REAL-TIME TWIN
+            <span className="guardian__status-dot" aria-hidden="true" /> SISTEMA ONLINE · GEMELLO IN TEMPO REALE
           </span>
         </div>
 
         <div className="guardian__interface">
-          <div className="nodes" role="tablist" aria-label="Guardian Core sub-systems">
+          <div className="nodes" role="tablist" aria-label="Sotto-sistemi del Guardian Core">
             {core.nodes.map((node) => {
               const active = node.id === activeNodeId;
               return (
