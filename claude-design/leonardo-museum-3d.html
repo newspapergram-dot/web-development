@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MoLE · Museum of Leonardo Evolution — Immersive 3D</title>
+    <title>MoLE · Museo dell'Evoluzione Leonardo — 3D Immersivo</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b1220'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23c9a84c' stroke-width='1.5' opacity='.5'/%3E%3Ccircle cx='32' cy='32' r='13' fill='none' stroke='%23c9a84c' stroke-width='1.5' opacity='.8'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Georgia,serif' font-size='20' fill='%23c9a84c'%3EL%3C/text%3E%3C/svg%3E"
     />
     <meta
       name="description"
-      content="An immersive, click-accessible 3D journey through Leonardo's DNA: Il Portale (2026), the Ballistae Imperialis of Imperial Rome, the Officine Leonardo of 1865, and the EarthSphere Guardian Core of 2055."
+      content="Un viaggio immersivo e accessibile nel DNA di Leonardo: Il Portale (2026), la Ballistae Imperialis della Roma Imperiale, le Officine Leonardo del 1865, e l'EarthSphere Guardian Core del 2055."
     />
     <style>
       :root {
@@ -114,19 +114,16 @@
       .gazette__title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; letter-spacing: .06em; }
       .gazette__date { font-size: .72rem; color: var(--ink-faint); margin-top: .2rem; }
       .gazette__headline { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.3; text-align: center; color: var(--accent); margin-bottom: 1rem; }
-      .archive { list-style: none; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
-      .archive__trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem .9rem; border: 1px solid rgba(244,236,220,.1); border-radius: 10px; background: rgba(255,255,255,.02); color: var(--ink); cursor: pointer; transition: border-color .25s, background .25s; }
-      .archive__trigger:hover { border-color: var(--accent); }
+      .archive { list-style: none; padding: 0; }
+      .archive__trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .7rem .8rem; border: none; border-bottom: 1px solid rgba(244,236,220,.08); background: transparent; color: var(--ink); text-align: left; cursor: pointer; transition: background .25s; }
+      .archive__trigger:hover { background: var(--accent-soft); }
       .archive__trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-      .archive__trigger[aria-expanded='true'] { border-color: var(--accent); background: var(--accent-soft); }
-      .archive__trigger b { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; }
-      .archive__trigger span { font-family: var(--font-mono); color: var(--accent); }
-      .archive__body { padding: .4rem .9rem .9rem; font-size: .88rem; line-height: 1.65; color: var(--ink-soft); }
-      .archive__body[hidden] { display: none; }
+      .archive__trigger b { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+      .archive__body { padding: .8rem 1rem; font-size: .88rem; line-height: 1.65; color: var(--ink-soft); }
       /* guardian */
-      .guardian__designation { position: absolute; top: 1rem; left: 1rem; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .22em; color: var(--accent); }
-      .guardian__status { position: absolute; top: 1rem; right: 1rem; display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .14em; color: var(--ink-soft); }
-      .guardian__status i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: blink 1.6s ease-in-out infinite; }
+      .guardian__designation { position: absolute; top: .8rem; left: 1rem; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .32em; text-transform: uppercase; color: var(--accent); opacity: .8; }
+      .guardian__status { display: flex; align-items: center; gap: .5rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-top: .6rem; }
+      .guardian__status i { width: 6px; height: 6px; border-radius: 50%; background: #0f8; animation: blink 2s infinite; }
       @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
       .nodes { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: 1rem; }
       .nodes__tab { display: flex; flex-direction: column; gap: .2rem; padding: .8rem .9rem; border: 1px solid rgba(70,177,255,.2); border-radius: 10px; background: rgba(70,177,255,.04); color: var(--ink-soft); text-align: left; cursor: pointer; transition: border-color .25s, background .25s, transform .25s; }
@@ -141,14 +138,50 @@
       .node-detail li { position: relative; padding-left: 1.1rem; font-size: .8rem; color: var(--ink-soft); }
       .node-detail li::before { content: ''; position: absolute; left: 0; top: .45em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
       .pager { display: flex; align-items: center; justify-content: space-between; gap: 1rem; max-width: var(--maxw); margin: 2.2rem auto 1rem; padding-top: 1.4rem; border-top: 1px solid rgba(244,236,220,.08); }
-      .pager button { padding: .7rem 1.2rem; border: 1px solid var(--accent-soft); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font-size: .85rem; transition: border-color .25s, background .25s; }
-      .pager button:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+      .pager button { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; background: var(--accent-soft); color: var(--ink); border: 1px solid var(--accent-soft); border-radius: 8px; padding: .55rem 1.2rem; cursor: pointer; transition: background .25s, border-color .25s; }
+      .pager button:hover:not(:disabled) { background: var(--accent); color: #0a0a0a; }
+      .pager button:disabled { opacity: .3; cursor: default; }
       .pager button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-      .pager button:disabled { opacity: .35; cursor: not-allowed; }
-      .pager__progress { font-family: var(--font-mono); font-size: .8rem; color: var(--ink-faint); }
-      .closing { max-width: 760px; margin: 1rem auto 2rem; text-align: center; }
+      .pager__progress { font-family: var(--font-mono); font-size: .75rem; color: var(--ink-faint); }
+      .closing { max-width: 640px; margin: 2.4rem auto; text-align: center; padding: 1.6rem; border: 1px solid var(--accent-soft); border-radius: var(--radius); background: var(--accent-soft); }
       .closing b { display: block; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; }
       .closing p { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.6; color: var(--ink-soft); }
+      /* corridor transition overlay */
+      .corridor-overlay {
+        position: fixed; inset: 0; z-index: 1000;
+        opacity: 1; transition: opacity .35s ease;
+      }
+      .corridor-overlay canvas { width: 100%; height: 100%; display: block; }
+      .corridor-overlay--fade-out { opacity: 0; }
+      /* Room 2 centered newspaper layout */
+      .officine-centered { position: relative; max-width: 720px; margin: 0 auto; }
+      .officine-centered .stage3d {
+        position: absolute; inset: -40px -60px; z-index: 0;
+        border: none; background: none; opacity: 0.18; pointer-events: none;
+        border-radius: 0; margin: 0;
+      }
+      .officine-centered .stage3d__canvas { height: 600px; }
+      .gazette--central {
+        position: relative; z-index: 1;
+        border: 1px solid var(--accent-soft); border-radius: var(--radius);
+        padding: 2rem 1.8rem 1.4rem; background: rgba(0,0,0,.6);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        transform: perspective(900px) rotateY(-1.5deg) rotateX(0.5deg);
+        box-shadow: 0 0 40px rgba(192,116,58,.15), 0 0 80px rgba(192,116,58,.06);
+        border-color: rgba(192,116,58,.35);
+        animation: gazetteGlow 3s ease-in-out infinite alternate;
+      }
+      @keyframes gazetteGlow {
+        from { box-shadow: 0 0 40px rgba(192,116,58,.15), 0 0 80px rgba(192,116,58,.06); }
+        to { box-shadow: 0 0 50px rgba(192,116,58,.25), 0 0 100px rgba(192,116,58,.1); }
+      }
+      .oggetto-label {
+        position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+        font-family: var(--font-mono); font-size: .62rem; letter-spacing: .28em;
+        text-transform: uppercase; color: var(--accent); background: var(--bg);
+        padding: .2rem .8rem; border: 1px solid var(--accent); border-radius: 6px;
+        white-space: nowrap; z-index: 2;
+      }
       @media (max-width: 980px) {
         .museum { grid-template-columns: 1fr; grid-template-areas: 'masthead' 'rail' 'stage'; height: auto; min-height: 100%; }
         body { overflow: auto; }
@@ -156,21 +189,22 @@
         .rail__list { flex-direction: row; overflow-x: auto; }
         .rail__button { min-width: 180px; }
         .grid2 { grid-template-columns: 1fr; }
+        .officine-centered .stage3d { inset: -20px -20px; }
       }
       @media (max-width: 560px) { .specs, .nodes, .node-detail ul { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
     <div class="museum" id="museum">
-      <a class="skip-link" href="#stage">Skip to current room</a>
+      <a class="skip-link" href="#stage">Vai alla sala corrente</a>
       <header class="masthead">
         <div class="masthead__brand">
           <span class="masthead__acronym">MoLE</span>
-          <span class="masthead__full">Museum of Leonardo Evolution</span>
+          <span class="masthead__full">Museo dell'Evoluzione Leonardo</span>
         </div>
-        <p class="masthead__motto">Technology for a safer future</p>
+        <p class="masthead__motto">Tecnologia per un futuro più sicuro</p>
       </header>
-      <nav class="rail" aria-label="Museum rooms"><ol class="rail__list" id="rail"></ol></nav>
+      <nav class="rail" aria-label="Sale del museo"><ol class="rail__list" id="rail"></ol></nav>
       <main class="stage" id="stage" tabindex="-1"></main>
     </div>
 
@@ -4013,75 +4047,75 @@ three/build/three.module.js:
     <script>
       /* THREE is provided as a global by the inlined bundle above. */
 
-      /* ---------------- Content (transcribed from GP5 TASK 1 & 2) ---------------- */
+      /* ---------------- Content (all Italian) ---------------- */
       const ROOMS = [
         {
-          id: 'entrance', index: 0, era: 'The Present', year: '2026',
-          title: 'Il Portale', subtitle: 'Two professionals enter the corridor of time',
-          accent: '#c9a84c', accentSoft: 'rgba(201,168,76,.16)', bg: '#0b1220', scene: 'portal',
-          narrative: 'Benvenuti in un viaggio immersivo nel cuore del DNA Leonardo. Two young professionals step into a luminous tunnel. Particles converge on a single motto. The world changes — challenges, technologies and risks change — yet the objective endures: create value and protect the present to build a safer future.',
-          feature: { kind: 'portal', motto: 'Technology for a safer future',
-            languages: ['Technology','Tecnologia','Technologie','Tecnología','Τεχνολογία','تقنية','技術','Технология','Teknologi','Ars'] }
+          id: "entrance", index: 0, era: "Il Presente", year: "2026",
+          title: "Il Portale", subtitle: "Due professionisti entrano nel corridoio del tempo",
+          accent: "#c9a84c", accentSoft: "rgba(201,168,76,.16)", bg: "#0b1220", scene: "portal",
+          narrative: "Benvenuti in un viaggio immersivo nel cuore del DNA Leonardo. Due giovani professionisti entrano in un tunnel luminoso. Le particelle scivolano lungo le pareti, trasformandosi lentamente in parole in molte lingue e alfabeti, convergendo in un unico motto. Il mondo cambia — le sfide, le tecnologie e i rischi cambiano — eppure l’obiettivo perdura: creare valore e proteggere il presente per costruire un futuro più sicuro.",
+          feature: { kind: "portal", motto: "Tecnologia per un futuro più sicuro",
+            languages: ["Technology","Tecnologia","Technologie","Tecnología","Τεχνολογία","تقنية","技術","Технология","Teknologi","Ars"] }
         },
         {
-          id: 'rome', index: 1, era: 'Impero Romano', year: 'Augustan Age',
-          title: 'Le Fondamenta · Leonardvs', subtitle: 'Ars ingenii ad securitatem futuri',
-          accent: '#d8a657', accentSoft: 'rgba(216,166,87,.18)', bg: '#170d04', scene: 'ballista',
-          narrative: 'In Imperial Rome, the Collegium Fabrorum Leonardvs places the art of engineering at the service of the Pax Romana. The Magister traces lines on parchment: the original project for the Ballistae Imperialis proves that, since the days of Augustus, the approach was rigorous and scientific — built to guarantee the security and stability of the Empire.',
-          feature: { kind: 'blueprint', name: 'BALLISTAE IMPERIALIS', codex: 'Codex Fabrorum Leonardvs',
+          id: "rome", index: 1, era: "Impero Romano", year: "Età Augustea",
+          title: "Le Fondamenta · Leonardvs", subtitle: "Ars ingenii ad securitatem futuri",
+          accent: "#d8a657", accentSoft: "rgba(216,166,87,.18)", bg: "#170d04", scene: "ballista",
+          narrative: "Nella Roma Imperiale, il Collegium Fabrorum Leonardvs mette l’arte dell’ingegneria al servizio della Pax Romana. Tecnica, organizzazione e strategia difendono i confini di un Impero in espansione. Il Magister traccia linee sulla pergamena: il progetto originale della Ballistae Imperialis dimostra che, fin dai tempi di Augusto, l’approccio era rigoroso e scientifico — costruito per garantire la sicurezza e la stabilità dell’Impero.",
+          feature: { kind: "blueprint", name: "BALLISTAE IMPERIALIS", codex: "Codex Fabrorum Leonardvs",
             specs: [
-              { label: 'LATITUDO', value: 'V PEDES', detail: 'Width calibrated for optimal torsion distribution across the oak frame.' },
-              { label: 'LONGITUDO', value: 'IX PEDES', detail: 'Length engineered for maximum projectile range at siege distances.' },
-              { label: 'PONDUS', value: 'DC LIBRAE', detail: 'Weight balanced for field mobility while preserving structural rigidity.' },
-              { label: 'TORMENTUM', value: 'NERVUS BOVIS', detail: 'Sinew torsion springs delivering consistent kinetic energy per release cycle.' }
+              { label: "LATITUDO", value: "V PEDES", detail: "Larghezza calibrata per una distribuzione ottimale della torsione lungo il telaio in quercia." },
+              { label: "LONGITUDO", value: "IX PEDES", detail: "Lunghezza progettata per la massima gittata del proiettile a distanze d’assedio." },
+              { label: "PONDUS", value: "DC LIBRAE", detail: "Peso bilanciato per la mobilità in campo preservando la rigidità strutturale." },
+              { label: "TORMENTUM", value: "NERVUS BOVIS", detail: "Molle di torsione in tendini che forniscono energia cinetica costante per ogni ciclo di rilascio." }
             ],
             hotspots: [
-              { id: 'structura', name: 'Structura Lignea', x: 24, y: 60, description: 'Oak-and-iron composite frame — the rigid foundation for torsion mechanics.' },
-              { id: 'tormentum', name: 'Tormentum', x: 44, y: 38, description: 'Twisted sinew bundles store and release mechanical energy with calibrated force.' },
-              { id: 'bracchium', name: 'Bracchium', x: 66, y: 30, description: 'Throwing arms of seasoned ash transfer rotational energy to the projectile.' },
-              { id: 'canalis', name: 'Canalis', x: 56, y: 64, description: 'Precision-grooved track guiding the bolt for an accurate, repeatable trajectory.' },
-              { id: 'sucula', name: 'Sucula', x: 32, y: 78, description: 'Ratcheted winch enabling controlled loading by a disciplined two-man crew.' }
+              { id: "structura", name: "Structura Lignea", x: 24, y: 60, description: "Telaio composito in quercia e ferro — la base rigida per la meccanica di torsione." },
+              { id: "tormentum", name: "Tormentum", x: 44, y: 38, description: "Fasci di tendini intrecciati che immagazzinano e rilasciano energia meccanica con forza calibrata." },
+              { id: "bracchium", name: "Bracchium", x: 66, y: 30, description: "Braccia di lancio in frassino stagionato che trasferiscono l’energia rotazionale al proiettile." },
+              { id: "canalis", name: "Canalis", x: 56, y: 64, description: "Binario di precisione scanalato che guida il dardo per una traiettoria precisa e ripetibile." },
+              { id: "sucula", name: "Sucula", x: 32, y: 78, description: "Argano a cremagliera che consente il caricamento controllato da un equipaggio disciplinato di due uomini." }
             ] }
         },
         {
-          id: 'industrial', index: 2, era: 'Rivoluzione Industriale', year: '1865',
-          title: 'Officine Leonardo', subtitle: 'Ingegno · Lavoro · Futuro',
-          accent: '#c0743a', accentSoft: 'rgba(192,116,58,.18)', bg: '#16110d', scene: 'officine',
-          narrative: 'Florence, 1865. Exposed brick and the rhythmic beat of steam hammers. The Officine Leonardo mark a paradigm shift: artisan mastery gives way to standardisation and mechanical precision. A recruitment manifesto promises instruction and social welfare, seeding the modern idea of One Leonardo.',
-          feature: { kind: 'archive', masthead: 'LA NAZIONE', edition: 'Edizione Straordinaria',
-            date: 'Firenze · Lunedì 16 Ottobre 1865',
-            headline: 'Le Officine Leonardo Inaugurano il Futuro Industriale della Nazione',
+          id: "industrial", index: 2, era: "Rivoluzione Industriale", year: "1865",
+          title: "Officine Leonardo", subtitle: "Ingegno · Lavoro · Futuro",
+          accent: "#c0743a", accentSoft: "rgba(192,116,58,.18)", bg: "#16110d", scene: "officine",
+          narrative: "Firenze, 1865. Mattoni a vista e il ritmo cadenzato dei martelli a vapore. Le Officine Leonardo segnano un cambio di paradigma: la maestria artigianale lascia il posto alla standardizzazione e alla precisione meccanica. Un manifesto di reclutamento promette istruzione e assistenza sociale, seminando l’idea moderna di One Leonardo — la scienza al servizio della protezione comune, una tecnologia d’avanguardia per un futuro più sicuro.",
+          feature: { kind: "archive", masthead: "LA NAZIONE", edition: "Edizione Straordinaria",
+            date: "Firenze · Lunedì 16 Ottobre 1865",
+            headline: "Le Officine Leonardo Inaugurano il Futuro Industriale della Nazione",
             articles: [
-              { id: 'vapore', title: 'La Macchina a Vapore', content: 'Imposing transmission shafts and leather belts, fed by three great boilers, drive lathes and steam hammers. Raw iron enters one door; standardised, interchangeable components emerge from another.' },
-              { id: 'standard', title: 'Il Componente Standardizzato', content: 'Every part is rigorously parcelled out by hydraulic lathes so precisely that one piece may be exchanged for another — the birth of Italian industrial standardisation.' },
-              { id: 'distretto', title: 'Il Distretto Leonardo', content: 'A village of well-ventilated brick cottages with running water rises beside the works. An evening school offers free instruction in reading, writing and the principles of mechanics.' },
-              { id: 'committenti', title: 'I Committenti del Regno', content: 'The patrons are no longer regional merchants but the Ministries of the Kingdom: systems to secure the merchant marine in the Mediterranean and signalling for the railways unifying the Nation.' }
+              { id: "vapore", title: "La Macchina a Vapore", content: "Imponenti alberi di trasmissione e cinghie in cuoio, alimentati da tre grandi caldaie, azionano torni e martelli a vapore. Il ferro grezzo entra da una porta; componenti standardizzati e intercambiabili escono dall’altra." },
+              { id: "standard", title: "Il Componente Standardizzato", content: "Ogni pezzo è rigorosamente lavorato da torni idraulici con tale precisione che un elemento può essere scambiato con un altro — la nascita della standardizzazione industriale italiana." },
+              { id: "distretto", title: "Il Distretto Leonardo", content: "Un villaggio di casette in mattoni ben ventilate con acqua corrente sorge accanto alle officine. Una scuola serale offre istruzione gratuita in lettura, scrittura e principi di meccanica." },
+              { id: "committenti", title: "I Committenti del Regno", content: "I committenti non sono più mercanti regionali ma i Ministeri del Regno: sistemi per mettere in sicurezza la marina mercantile nel Mediterraneo e segnalamento per le ferrovie che unificano la Nazione." }
             ] }
         },
         {
-          id: 'future', index: 3, era: 'Il Futuro', year: '2055',
-          title: 'EarthSphere Guardian Core', subtitle: 'Custodi del Pianeta',
-          accent: '#46b1ff', accentSoft: 'rgba(70,177,255,.18)', bg: '#020814', scene: 'guardian',
-          narrative: 'The corridor darkens; a 360° holographic interface flickers to life. The EarthSphere Guardian Core renders a real-time digital twin of the Earth — the culmination of Leonardo’s evolution, from building physical machines to stewarding complex digital ecosystems. The true challenge of 2055 is to guarantee the resilience of entire ecosystems.',
-          feature: { kind: 'guardian', designation: 'EARTHSPHERE · GUARDIAN CORE',
+          id: "future", index: 3, era: "Il Futuro", year: "2055",
+          title: "EarthSphere Guardian Core", subtitle: "Custodi del Pianeta",
+          accent: "#46b1ff", accentSoft: "rgba(70,177,255,.18)", bg: "#020814", scene: "guardian",
+          narrative: "Il corridoio si oscura; un’interfaccia olografica a 360° prende vita. L’EarthSphere Guardian Core genera un gemello digitale della Terra in tempo reale. È il culmine dell’evoluzione di Leonardo — dalla costruzione di macchine fisiche alla custodia di ecosistemi digitali complessi — anticipando crisi globali e proteggendo l’intero pianeta. La vera sfida del 2055 è garantire la resilienza di interi ecosistemi.",
+          feature: { kind: "guardian", designation: "EARTHSPHERE · GUARDIAN CORE",
             nodes: [
-              { id: 'intelligence', name: 'Planetary Intelligence', tagline: 'Real-time planetary awareness', description: 'A mesh of orbital sensors, autonomous drones and predictive AI delivering continuous, real-time awareness. Every data point feeds the Guardian Core’s forecasting models.', items: ['Satellite Constellations','Autonomous Drone Swarms','Cyber Defence Grid','Predictive AI Engine'] },
-              { id: 'resilience', name: 'Planetary Resilience', tagline: 'Resilience of entire ecosystems', description: 'Adaptive, self-healing systems safeguard growing megalopolises and lunar settlements, engineering the infrastructure for new frontiers and a stable climate.', items: ['Lunar Community Infrastructure','Megalopolis Defence Systems','Climate Adaptation Networks','Resource Distribution AI'] },
-              { id: 'one-leonardo', name: 'One Leonardo Network', tagline: 'One organisation, one digital model', description: 'A single organisation operating as one digital model — distributed across continents, unified in purpose through a seamless digital fabric.', items: ['Distributed Global Network','Single Digital Model','Unified Command Architecture','Cross-Domain Integration'] },
-              { id: 'custodi', name: 'Custodi del Pianeta', tagline: 'Planetary guardianship', description: 'Quantum networks enable instantaneous coordination; an algorithmic ethics framework ensures every decision serves humanity. Predictive simulations model tomorrow before it arrives.', items: ['Predictive Simulation Engine','Quantum Communication Networks','Algorithmic Ethics Framework','Planetary Early Warning System'] }
+              { id: "intelligence", name: "Intelligenza Planetaria", tagline: "Consapevolezza planetaria in tempo reale", description: "Una rete di sensori orbitali, droni autonomi e IA predittiva che fornisce una consapevolezza continua in tempo reale. Ogni dato alimenta i modelli previsionali del Guardian Core.", items: ["Costellazioni Satellitari","Sciami di Droni Autonomi","Griglia di Difesa Cyber","Motore IA Predittivo"] },
+              { id: "resilience", name: "Resilienza Planetaria", tagline: "Resilienza di interi ecosistemi", description: "Sistemi adattivi e auto-rigeneranti che salvaguardano le megalopoli in crescita e gli insediamenti lunari, progettando l’infrastruttura per nuove frontiere e un clima stabile.", items: ["Infrastruttura Comunità Lunare","Sistemi di Difesa Megalopoli","Reti di Adattamento Climatico","IA Distribuzione Risorse"] },
+              { id: "one-leonardo", name: "Rete One Leonardo", tagline: "Un’organizzazione, un modello digitale", description: "Un’unica organizzazione che opera come un unico modello digitale — distribuita su più continenti, unificata nel proposito attraverso un tessuto digitale senza soluzione di continuità.", items: ["Rete Globale Distribuita","Modello Digitale Unico","Architettura di Comando Unificata","Integrazione Cross-Dominio"] },
+              { id: "custodi", name: "Custodi del Pianeta", tagline: "Custodia planetaria", description: "Le reti quantistiche consentono un coordinamento istantaneo; un quadro etico algoritmico assicura che ogni decisione sia al servizio dell’umanità. Le simulazioni predittive modellano il domani prima che arrivi.", items: ["Motore di Simulazione Predittiva","Reti di Comunicazione Quantistica","Quadro Etico Algoritmico","Sistema di Allerta Precoce Planetaria"] }
             ] }
         }
       ];
-      const CLOSING = 'The corridor ends where it began — La Sala degli Specchi. The visitor fragments into mirrored data and reflections, confronted with a single question: who imagines the next builder? They carry twenty centuries of innovation, and the will to keep changing the world.';
+      var CLOSING = "Il corridoio finisce dove è iniziato — La Sala degli Specchi. Il visitatore si frammenta in dati e riflessi speculari, confrontato da un’unica domanda: chi immagina il prossimo costruttore? Portano con sé venti secoli di innovazione, e la volontà di continuare a cambiare il mondo.";
 
       /* ---------------- Three.js stage manager ---------------- */
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let renderer = null, camera = null, scene = null, controller = null, raf = 0;
-      const clock = new THREE.Clock();
-      const pointer = new THREE.Vector2(0, 0);
-      window.addEventListener('pointermove', (e) => {
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var renderer = null, camera = null, scene = null, controller = null, raf = 0;
+      var clock = new THREE.Clock();
+      var pointer = new THREE.Vector2(0, 0);
+      window.addEventListener("pointermove", function(e) {
         if (!renderer) return;
-        const r = renderer.domElement.getBoundingClientRect();
+        var r = renderer.domElement.getBoundingClientRect();
         pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
         pointer.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
       }, { passive: true });
@@ -4094,294 +4128,497 @@ three/build/three.module.js:
       }
 
       function mountStage(mount, room, opts) {
-        const fov = opts.fov || 55, cz = opts.cameraZ || 6;
-        const w = mount.clientWidth || 1, h = mount.clientHeight || 1;
+        var fov = opts.fov || 55, cz = opts.cameraZ || 6;
+        var w = mount.clientWidth || 1, h = mount.clientHeight || 1;
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(w, h, false);
-        renderer.domElement.className = 'stage3d__canvas';
-        renderer.domElement.setAttribute('aria-hidden', 'true');
+        renderer.domElement.className = "stage3d__canvas";
+        renderer.domElement.setAttribute("aria-hidden", "true");
         mount.prepend(renderer.domElement);
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(fov, w / h, 0.1, 100);
         camera.position.set(0, 0, cz);
         controller = SCENES[room.scene](new THREE.Color(room.accent), scene);
-        const loop = () => {
-          const d = clock.getDelta(), e = clock.getElapsedTime();
+        var loop = function() {
+          var d = clock.getDelta(), e = clock.getElapsedTime();
           if (controller.update) controller.update(e, d, pointer);
           renderer.render(scene, camera);
           if (!reduceMotion) raf = requestAnimationFrame(loop);
         };
         loop();
-        const onResize = () => {
+        var onResize = function() {
           if (!renderer) return;
-          const nw = mount.clientWidth || 1, nh = mount.clientHeight || 1;
+          var nw = mount.clientWidth || 1, nh = mount.clientHeight || 1;
           renderer.setSize(nw, nh, false); camera.aspect = nw / nh; camera.updateProjectionMatrix();
           if (reduceMotion) renderer.render(scene, camera);
         };
         new ResizeObserver(onResize).observe(mount);
       }
 
-      const SCENES = {
-        portal(color, scene) {
-          const count = 1300, pos = new Float32Array(count * 3), spd = new Float32Array(count);
-          for (let i = 0; i < count; i++) {
-            const r = 0.6 + Math.random() * 2.4, a = Math.random() * Math.PI * 2;
+      var SCENES = {
+        portal: function(color, scene) {
+          var count = 1300, pos = new Float32Array(count * 3), spd = new Float32Array(count);
+          for (var i = 0; i < count; i++) {
+            var r = 0.6 + Math.random() * 2.4, a = Math.random() * Math.PI * 2;
             pos[i*3] = Math.cos(a)*r; pos[i*3+1] = Math.sin(a)*r; pos[i*3+2] = -Math.random()*14; spd[i] = 1.4 + Math.random()*2.6;
           }
-          const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-          const m = new THREE.PointsMaterial({ color, size: 0.045, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
-          const pts = new THREE.Points(g, m); scene.add(pts);
-          const rg = new THREE.TorusGeometry(2.6, 0.012, 8, 120), rm = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.25 });
-          const rings = []; for (let i = 0; i < 5; i++) { const ring = new THREE.Mesh(rg, rm); ring.position.z = -i*3; scene.add(ring); rings.push(ring); }
-          const attr = g.getAttribute('position');
-          return { update(e, d, p) {
-              for (let i = 0; i < count; i++) { let z = attr.getZ(i) + spd[i]*d; if (z > 2) z = -14; attr.setZ(i, z); }
+          var g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+          var m = new THREE.PointsMaterial({ color: color, size: 0.045, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
+          var pts = new THREE.Points(g, m); scene.add(pts);
+          var rg = new THREE.TorusGeometry(2.6, 0.012, 8, 120), rm = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.25 });
+          var rings = []; for (var j = 0; j < 5; j++) { var ring = new THREE.Mesh(rg, rm); ring.position.z = -j*3; scene.add(ring); rings.push(ring); }
+          var attr = g.getAttribute("position");
+          return { update: function(e, d, p) {
+              for (var i = 0; i < count; i++) { var z = attr.getZ(i) + spd[i]*d; if (z > 2) z = -14; attr.setZ(i, z); }
               attr.needsUpdate = true; pts.rotation.z = e*0.04;
-              rings.forEach(r => { r.position.z += d*2.2; if (r.position.z > 2.5) r.position.z = -12; });
+              rings.forEach(function(r) { r.position.z += d*2.2; if (r.position.z > 2.5) r.position.z = -12; });
               scene.rotation.x = p.y*0.12; scene.rotation.y = p.x*0.12;
-            }, dispose() { g.dispose(); m.dispose(); rg.dispose(); rm.dispose(); } };
+            }, dispose: function() { g.dispose(); m.dispose(); rg.dispose(); rm.dispose(); } };
         },
-        ballista(color, scene) {
-          const rig = new THREE.Group(); scene.add(rig);
-          const line = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.9 });
-          const solid = new THREE.MeshStandardMaterial({ color, metalness: 0.5, roughness: 0.4, emissive: color.clone().multiplyScalar(0.12) });
-          const track = [line, solid];
-          const beam = (w, h, dp, x, y, z) => {
-            const geo = new THREE.BoxGeometry(w, h, dp); track.push(geo);
-            const mesh = new THREE.Mesh(geo, solid); mesh.position.set(x, y, z); rig.add(mesh);
-            const ed = new THREE.EdgesGeometry(geo); track.push(ed); rig.add(new THREE.LineSegments(ed, line));
+        ballista: function(color, scene) {
+          var rig = new THREE.Group(); scene.add(rig);
+          var line = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.9 });
+          var solid = new THREE.MeshStandardMaterial({ color: color, metalness: 0.5, roughness: 0.4, emissive: color.clone().multiplyScalar(0.12) });
+          var track = [line, solid];
+          var beam = function(w, h, dp, x, y, z) {
+            var geo = new THREE.BoxGeometry(w, h, dp); track.push(geo);
+            var mesh = new THREE.Mesh(geo, solid); mesh.position.set(x, y, z); rig.add(mesh);
+            var ed = new THREE.EdgesGeometry(geo); track.push(ed); rig.add(new THREE.LineSegments(ed, line));
           };
           beam(3.4,.16,.16,0,-.8,.5); beam(3.4,.16,.16,0,-.8,-.5); beam(.16,.16,1.2,-1.5,-.8,0); beam(.16,.16,1.2,1.5,-.8,0);
           beam(.18,1.5,.18,-1.1,-.1,0); beam(.18,1.5,.18,1.1,-.1,0); beam(2.6,.1,.22,0,.55,0);
-          const sg = new THREE.TorusGeometry(.32,.09,10,28); track.push(sg);
-          const sL = new THREE.Mesh(sg, solid); sL.position.set(-1.1,.4,0); sL.rotation.y = Math.PI/2;
-          const sR = sL.clone(); sR.position.x = 1.1; rig.add(sL, sR);
-          const ag = new THREE.CylinderGeometry(.05,.08,1.5,12); track.push(ag);
-          const aL = new THREE.Mesh(ag, solid); aL.position.set(-1.1,.9,0); const aR = aL.clone(); aR.position.x = 1.1; rig.add(aL, aR);
-          const key = new THREE.DirectionalLight(0xfff2d0, 1.5); key.position.set(3,4,5);
+          var sg = new THREE.TorusGeometry(.32,.09,10,28); track.push(sg);
+          var sL = new THREE.Mesh(sg, solid); sL.position.set(-1.1,.4,0); sL.rotation.y = Math.PI/2;
+          var sR = sL.clone(); sR.position.x = 1.1; rig.add(sL, sR);
+          var ag = new THREE.CylinderGeometry(.05,.08,1.5,12); track.push(ag);
+          var aL = new THREE.Mesh(ag, solid); aL.position.set(-1.1,.9,0); var aR = aL.clone(); aR.position.x = 1.1; rig.add(aL, aR);
+          var key = new THREE.DirectionalLight(0xfff2d0, 1.5); key.position.set(3,4,5);
           scene.add(key, new THREE.AmbientLight(0x4a361c, 1.1));
-          let charge = 0;
-          return { update(e, d, p) {
+          var charge = 0;
+          return { update: function(e, d, p) {
               rig.rotation.y = e*0.35 + p.x*0.5; rig.rotation.x = -0.18 + p.y*0.25;
-              charge = (charge + d*0.6) % 1; const draw = charge < .8 ? charge/.8 : 1-(charge-.8)/.2;
-              const sw = -0.5 - draw*0.7; aL.rotation.z = sw; aR.rotation.z = -sw;
-            }, dispose() { track.forEach(t => t.dispose()); } };
+              charge = (charge + d*0.6) % 1; var draw = charge < .8 ? charge/.8 : 1-(charge-.8)/.2;
+              var sw = -0.5 - draw*0.7; aL.rotation.z = sw; aR.rotation.z = -sw;
+            }, dispose: function() { track.forEach(function(t) { t.dispose(); }); } };
         },
-        officine(color, scene) {
-          const track = [];
-          const gear = (radius, teeth, thick) => {
-            const shape = new THREE.Shape(); const td = radius*0.16, step = (Math.PI*2)/(teeth*2);
-            for (let i = 0; i <= teeth*2; i++) { const r = i%2===0?radius:radius-td, a = i*step, x = Math.cos(a)*r, y = Math.sin(a)*r; i===0?shape.moveTo(x,y):shape.lineTo(x,y); }
-            const hole = new THREE.Path(); hole.absarc(0,0,radius*0.25,0,Math.PI*2,true); shape.holes.push(hole);
-            const geo = new THREE.ExtrudeGeometry(shape, { depth: thick, bevelEnabled: true, bevelThickness: .02, bevelSize: .02, bevelSegments: 1, steps: 1 });
+        officine: function(color, scene) {
+          var track = [];
+          var gear = function(radius, teeth, thick) {
+            var shape = new THREE.Shape(); var td = radius*0.16, step = (Math.PI*2)/(teeth*2);
+            for (var i = 0; i <= teeth*2; i++) { var r = i%2===0?radius:radius-td, a = i*step, x = Math.cos(a)*r, y = Math.sin(a)*r; i===0?shape.moveTo(x,y):shape.lineTo(x,y); }
+            var hole = new THREE.Path(); hole.absarc(0,0,radius*0.25,0,Math.PI*2,true); shape.holes.push(hole);
+            var geo = new THREE.ExtrudeGeometry(shape, { depth: thick, bevelEnabled: true, bevelThickness: .02, bevelSize: .02, bevelSegments: 1, steps: 1 });
             geo.center(); track.push(geo);
-            const mat = new THREE.MeshStandardMaterial({ color, metalness: .85, roughness: .35, emissive: color.clone().multiplyScalar(0.08) }); track.push(mat);
+            var mat = new THREE.MeshStandardMaterial({ color: color, metalness: .85, roughness: .35, emissive: color.clone().multiplyScalar(0.08) }); track.push(mat);
             return new THREE.Mesh(geo, mat);
           };
-          const A = gear(1.3,18,.3); A.position.set(-.9,.2,0);
-          const B = gear(.95,13,.3); B.position.set(1,-.1,.1);
-          const C = gear(.6,9,.3); C.position.set(.35,1.25,-.2);
+          var A = gear(1.3,18,.3); A.position.set(-.9,.2,0);
+          var B = gear(.95,13,.3); B.position.set(1,-.1,.1);
+          var C = gear(.6,9,.3); C.position.set(.35,1.25,-.2);
           scene.add(A, B, C);
-          const key = new THREE.DirectionalLight(0xffd9a8, 1.6); key.position.set(-4,3,6);
-          const rim = new THREE.DirectionalLight(0x6699ff, 0.5); rim.position.set(5,-2,-4);
+          var key = new THREE.DirectionalLight(0xffd9a8, 1.6); key.position.set(-4,3,6);
+          var rim = new THREE.DirectionalLight(0x6699ff, 0.5); rim.position.set(5,-2,-4);
           scene.add(key, rim, new THREE.AmbientLight(0x3a2a1c, 1.2));
-          return { update(e, _d, p) {
+          return { update: function(e, _d, p) {
               A.rotation.z = e*0.6; B.rotation.z = -e*0.6*(18/13); C.rotation.z = -e*0.6*(18/9);
               scene.rotation.y = p.x*0.3; scene.rotation.x = p.y*0.2;
-            }, dispose() { track.forEach(t => t.dispose()); } };
+            }, dispose: function() { track.forEach(function(t) { t.dispose(); }); } };
         },
-        guardian(color, scene) {
-          const track = []; const core = new THREE.Group(); scene.add(core);
-          const sg = new THREE.IcosahedronGeometry(1.5, 3); track.push(sg);
-          const wm = new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: 0.45 }); track.push(wm);
-          const globe = new THREE.Mesh(sg, wm); core.add(globe);
-          const gg = new THREE.IcosahedronGeometry(1.46, 2); track.push(gg);
-          const gm = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.08, side: THREE.BackSide }); track.push(gm);
+        guardian: function(color, scene) {
+          var track = []; var core = new THREE.Group(); scene.add(core);
+          var sg = new THREE.IcosahedronGeometry(1.5, 3); track.push(sg);
+          var wm = new THREE.MeshBasicMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.45 }); track.push(wm);
+          var globe = new THREE.Mesh(sg, wm); core.add(globe);
+          var gg = new THREE.IcosahedronGeometry(1.46, 2); track.push(gg);
+          var gm = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.08, side: THREE.BackSide }); track.push(gm);
           core.add(new THREE.Mesh(gg, gm));
-          const rg = new THREE.TorusGeometry(2.3, .008, 8, 160); track.push(rg);
-          const rm = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.35 }); track.push(rm);
-          const rx = new THREE.Mesh(rg, rm); rx.rotation.x = Math.PI/2;
-          const ry = new THREE.Mesh(rg, rm); ry.rotation.y = Math.PI/3; scene.add(rx, ry);
-          const ng = new THREE.SphereGeometry(.12,16,16); track.push(ng);
-          const nm = new THREE.MeshBasicMaterial({ color }); track.push(nm);
-          const nodes = []; for (let i = 0; i < 4; i++) { const n = new THREE.Mesh(ng, nm); scene.add(n); nodes.push(n); }
+          var rg = new THREE.TorusGeometry(2.3, .008, 8, 160); track.push(rg);
+          var rm = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.35 }); track.push(rm);
+          var rx = new THREE.Mesh(rg, rm); rx.rotation.x = Math.PI/2;
+          var ry = new THREE.Mesh(rg, rm); ry.rotation.y = Math.PI/3; scene.add(rx, ry);
+          var ng = new THREE.SphereGeometry(.12,16,16); track.push(ng);
+          var nm = new THREE.MeshBasicMaterial({ color: color }); track.push(nm);
+          var nodes = []; for (var i = 0; i < 4; i++) { var n = new THREE.Mesh(ng, nm); scene.add(n); nodes.push(n); }
           scene.add(new THREE.AmbientLight(0x0a2240, 1.0));
-          return { update(e, _d, p) {
+          return { update: function(e, _d, p) {
               globe.rotation.y = e*0.18; core.rotation.x = p.y*0.3; core.rotation.y = p.x*0.3;
               rx.rotation.z = e*0.1; ry.rotation.z = -e*0.12;
-              nodes.forEach((n, i) => { const a = e*0.4 + i*Math.PI/2;
+              nodes.forEach(function(n, i) { var a = e*0.4 + i*Math.PI/2;
                 n.position.set(Math.cos(a)*2.3, Math.sin(a*1.3)*0.6, Math.sin(a)*2.3);
                 n.scale.setScalar(1 + Math.sin(e*2+i)*0.25); });
-            }, dispose() { track.forEach(t => t.dispose()); } };
+            }, dispose: function() { track.forEach(function(t) { t.dispose(); }); } };
         }
       };
 
-      /* ---------------- UI rendering ---------------- */
-      const railEl = document.getElementById('rail');
-      const stageEl = document.getElementById('stage');
-      const museumEl = document.getElementById('museum');
-      const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-      let current = 0;
+      /* ---------------- Corridor transition system ---------------- */
+      var corridorCleanup = null;
 
-      ROOMS.forEach((room) => {
-        const li = document.createElement('li');
-        const b = document.createElement('button');
-        b.className = 'rail__button'; b.type = 'button';
-        b.innerHTML = `<span class="rail__index">${String(room.index).padStart(2,'0')}</span>
-          <span class="rail__meta"><span class="rail__year">${esc(room.year)}</span><span class="rail__name">${esc(room.title)}</span></span>`;
-        b.addEventListener('click', () => go(room.index));
+      function runCorridorTransition(fromColor, toColor, onComplete) {
+        if (reduceMotion) { onComplete(); return; }
+        var overlay = document.createElement("div");
+        overlay.className = "corridor-overlay";
+        var canvas = document.createElement("canvas");
+        overlay.appendChild(canvas);
+        document.body.appendChild(overlay);
+
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+
+        var tRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+        tRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        tRenderer.setSize(width, height, false);
+
+        var tScene = new THREE.Scene();
+        var from = new THREE.Color(fromColor);
+        var to = new THREE.Color(toColor);
+        tScene.background = from.clone();
+        tScene.fog = new THREE.FogExp2(from.getHex(), 0.08);
+
+        var tCamera = new THREE.PerspectiveCamera(75, width / height, 0.1, 200);
+        tCamera.position.set(0, 1.6, 0);
+        tCamera.lookAt(0, 1.6, -50);
+
+        var wallMat = new THREE.MeshStandardMaterial({
+          color: 0x1a1a1a, roughness: 0.9, metalness: 0.1,
+          emissive: from, emissiveIntensity: 0.05
+        });
+        var floorMat = new THREE.MeshStandardMaterial({
+          color: 0x0f0f0f, roughness: 0.85, metalness: 0.2,
+          emissive: from, emissiveIntensity: 0.03
+        });
+        var ceilMat = new THREE.MeshStandardMaterial({
+          color: 0x111111, roughness: 0.95, metalness: 0.05
+        });
+
+        var corridorLength = 100, corridorWidth = 4, corridorHeight = 4;
+
+        var floorGeo = new THREE.PlaneGeometry(corridorWidth, corridorLength);
+        var floorMesh = new THREE.Mesh(floorGeo, floorMat);
+        floorMesh.rotation.x = -Math.PI / 2;
+        floorMesh.position.set(0, 0, -corridorLength / 2);
+        tScene.add(floorMesh);
+
+        var ceilingMesh = new THREE.Mesh(floorGeo, ceilMat);
+        ceilingMesh.rotation.x = Math.PI / 2;
+        ceilingMesh.position.set(0, corridorHeight, -corridorLength / 2);
+        tScene.add(ceilingMesh);
+
+        var wallGeo = new THREE.PlaneGeometry(corridorLength, corridorHeight);
+        var leftWall = new THREE.Mesh(wallGeo, wallMat);
+        leftWall.rotation.y = Math.PI / 2;
+        leftWall.position.set(-corridorWidth / 2, corridorHeight / 2, -corridorLength / 2);
+        tScene.add(leftWall);
+
+        var rightWall = new THREE.Mesh(wallGeo, wallMat);
+        rightWall.rotation.y = -Math.PI / 2;
+        rightWall.position.set(corridorWidth / 2, corridorHeight / 2, -corridorLength / 2);
+        tScene.add(rightWall);
+
+        var archGeo = new THREE.TorusGeometry(1.8, 0.06, 8, 32, Math.PI);
+        var archMat = new THREE.MeshStandardMaterial({
+          color: 0x333333, emissive: from, emissiveIntensity: 0.3,
+          metalness: 0.6, roughness: 0.4
+        });
+        for (var ai = 0; ai < 12; ai++) {
+          var arch = new THREE.Mesh(archGeo, archMat);
+          arch.position.set(0, corridorHeight / 2 + 0.2, -8 - ai * 7);
+          arch.rotation.z = Math.PI;
+          tScene.add(arch);
+        }
+
+        var lightStripGeo = new THREE.PlaneGeometry(0.04, corridorLength);
+        var lightStripMat = new THREE.MeshBasicMaterial({
+          color: from, transparent: true, opacity: 0.4, side: THREE.DoubleSide
+        });
+        var stripLeft = new THREE.Mesh(lightStripGeo, lightStripMat);
+        stripLeft.rotation.x = -Math.PI / 2;
+        stripLeft.position.set(-corridorWidth / 2 + 0.01, 0.01, -corridorLength / 2);
+        var stripRight = stripLeft.clone();
+        stripRight.position.x = corridorWidth / 2 - 0.01;
+        tScene.add(stripLeft, stripRight);
+
+        var particleCount = 400;
+        var particlePositions = new Float32Array(particleCount * 3);
+        for (var pi = 0; pi < particleCount; pi++) {
+          particlePositions[pi * 3] = (Math.random() - 0.5) * corridorWidth * 0.8;
+          particlePositions[pi * 3 + 1] = Math.random() * corridorHeight;
+          particlePositions[pi * 3 + 2] = -Math.random() * corridorLength;
+        }
+        var particleGeo = new THREE.BufferGeometry();
+        particleGeo.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+        var particleMat = new THREE.PointsMaterial({
+          color: from, size: 0.04, transparent: true, opacity: 0.6,
+          blending: THREE.AdditiveBlending, depthWrite: false
+        });
+        var particles = new THREE.Points(particleGeo, particleMat);
+        tScene.add(particles);
+
+        var ambient = new THREE.AmbientLight(0x222222, 0.8);
+        tScene.add(ambient);
+        for (var li = 0; li < 6; li++) {
+          var light = new THREE.PointLight(from.getHex(), 1.5, 18);
+          light.position.set(0, corridorHeight - 0.5, -10 - li * 14);
+          tScene.add(light);
+        }
+
+        var duration = 1.8;
+        var startTime = performance.now();
+        var tRaf = 0;
+        var disposed = false;
+
+        var dispose = function() {
+          disposed = true;
+          cancelAnimationFrame(tRaf);
+          tRenderer.dispose();
+          floorGeo.dispose(); wallGeo.dispose(); archGeo.dispose();
+          lightStripGeo.dispose(); particleGeo.dispose();
+          wallMat.dispose(); floorMat.dispose(); ceilMat.dispose();
+          archMat.dispose(); lightStripMat.dispose(); particleMat.dispose();
+        };
+
+        var animate = function() {
+          if (disposed) return;
+          var elapsed = (performance.now() - startTime) / 1000;
+          var t = Math.min(elapsed / duration, 1);
+          var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+          tCamera.position.z = -eased * (corridorLength - 5);
+
+          var lerpedColor = from.clone().lerp(to, eased);
+          tScene.fog = new THREE.FogExp2(lerpedColor.getHex(), 0.06 + eased * 0.04);
+          tScene.background.copy(lerpedColor);
+
+          lightStripMat.color.copy(lerpedColor);
+          archMat.emissive.copy(lerpedColor);
+          particleMat.color.copy(lerpedColor);
+          wallMat.emissive.copy(lerpedColor);
+          floorMat.emissive.copy(lerpedColor);
+
+          var pAttr = particleGeo.getAttribute("position");
+          for (var i = 0; i < particleCount; i++) {
+            var z = pAttr.getZ(i) + 0.3;
+            if (z > tCamera.position.z + 5) {
+              z = tCamera.position.z - corridorLength * 0.6;
+            }
+            pAttr.setZ(i, z);
+          }
+          pAttr.needsUpdate = true;
+
+          var shake = Math.max(0, 1 - t) * 0.015;
+          tCamera.position.x = Math.sin(elapsed * 12) * shake;
+          tCamera.position.y = 1.6 + Math.sin(elapsed * 6) * shake * 0.5;
+
+          tRenderer.render(tScene, tCamera);
+
+          if (t >= 1) {
+            overlay.classList.add("corridor-overlay--fade-out");
+            setTimeout(function() {
+              dispose();
+              overlay.remove();
+              onComplete();
+            }, 350);
+            return;
+          }
+          tRaf = requestAnimationFrame(animate);
+        };
+
+        tRaf = requestAnimationFrame(animate);
+        corridorCleanup = dispose;
+      }
+
+      /* ---------------- UI rendering ---------------- */
+      var railEl = document.getElementById("rail");
+      var stageEl = document.getElementById("stage");
+      var museumEl = document.getElementById("museum");
+      var esc = function(s) { return String(s).replace(/[&<>"']/g, function(c) { return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]; }); };
+      var current = 0;
+      var transitioning = false;
+
+      ROOMS.forEach(function(room) {
+        var li = document.createElement("li");
+        var b = document.createElement("button");
+        b.className = "rail__button"; b.type = "button";
+        b.innerHTML = "<span class=\"rail__index\">" + String(room.index).padStart(2,"0") + "</span>" +
+          "<span class=\"rail__meta\"><span class=\"rail__year\">" + esc(room.year) + "</span><span class=\"rail__name\">" + esc(room.title) + "</span></span>";
+        b.addEventListener("click", function() { go(room.index); });
         li.appendChild(b); railEl.appendChild(li);
       });
 
       function featureHTML(room) {
-        const f = room.feature;
-        if (f.kind === 'portal') {
-          return `<figure class="stage3d"><div class="stage3d__canvas" id="stage-mount"></div>
-              <figcaption class="stage3d__caption">A luminous particle tunnel streaming toward the visitor — the corridor of time.</figcaption></figure>
-            <div class="portal">
-              <ul class="portal__languages" aria-label="The word 'technology' converging across languages">
-                ${f.languages.map((w, i) => `<li class="portal__word" style="animation-delay:${i*0.18}s">${esc(w)}</li>`).join('')}
-              </ul>
-              <p class="portal__motto">“${esc(f.motto)}”</p>
-              <p class="portal__lead">Two young professionals enter the corridor. The core identity of Leonardo endures across every era: the capacity to <strong>innovate</strong> and <strong>create value</strong>.</p>
-            </div>`;
+        var f = room.feature;
+        if (f.kind === "portal") {
+          return "<figure class=\"stage3d\"><div class=\"stage3d__canvas\" id=\"stage-mount\"></div>" +
+              "<figcaption class=\"stage3d__caption\">Un tunnel luminoso di particelle che scorre verso il visitatore — il corridoio del tempo.</figcaption></figure>" +
+            "<div class=\"portal\">" +
+              "<ul class=\"portal__languages\" aria-label=\"La parola tecnologia converge attraverso le lingue\">" +
+                f.languages.map(function(w, i) { return "<li class=\"portal__word\" style=\"animation-delay:" + (i*0.18) + "s\">" + esc(w) + "</li>"; }).join("") +
+              "</ul>" +
+              "<p class=\"portal__motto\">\"“" + esc(f.motto) + "”\"</p>" +
+              "<p class=\"portal__lead\">Due giovani professionisti entrano nel corridoio. L’identità fondamentale di Leonardo perdura in ogni epoca: la capacità di <strong>innovare</strong> e <strong>creare valore</strong>.</p>" +
+            "</div>";
         }
-        if (f.kind === 'blueprint') {
-          return `<div class="grid2">
-              <div style="position:relative">
-                <figure class="stage3d"><div class="stage3d__canvas" id="stage-mount"></div>
-                  <figcaption class="stage3d__caption">A rotating reconstruction of the Ballistae Imperialis, its torsion arms loading and releasing.</figcaption></figure>
-                <div class="hotspots" id="hotspots" role="group" aria-label="Ballistae Imperialis components">
-                  ${f.hotspots.map(h => `<button class="hotspot" type="button" data-id="${h.id}" aria-pressed="false"
-                      aria-label="${esc(h.name)}. ${esc(h.description)}" style="left:${h.x}%;top:${h.y}%">
-                      <span class="hotspot__pulse" aria-hidden="true"></span><span class="hotspot__dot" aria-hidden="true"></span>
-                      <span class="hotspot__label">${esc(h.name)}</span></button>`).join('')}
-                </div>
-              </div>
-              <div class="panel">
-                <p class="codex">${esc(f.codex)}</p><h3 class="bp-name">${esc(f.name)}</h3>
-                <div class="readout" id="readout" aria-live="polite"><p style="color:var(--ink-faint);font-style:italic">Hover or select a hot-spot to inspect each component of the torsion engine.</p></div>
-                <dl class="specs">${f.specs.map(s => `<div class="specs__item"><dt class="specs__label">${esc(s.label)}</dt>
-                    <dd class="specs__value" title="${esc(s.detail)}">${esc(s.value)}</dd><p class="specs__detail">${esc(s.detail)}</p></div>`).join('')}</dl>
-              </div>
-            </div>`;
+        if (f.kind === "blueprint") {
+          return "<div class=\"grid2\">" +
+              "<div style=\"position:relative\">" +
+                "<figure class=\"stage3d\"><div class=\"stage3d__canvas\" id=\"stage-mount\"></div>" +
+                  "<figcaption class=\"stage3d__caption\">Una ricostruzione rotante della Ballistae Imperialis, con le braccia di torsione che caricano e rilasciano.</figcaption></figure>" +
+                "<div class=\"hotspots\" id=\"hotspots\" role=\"group\" aria-label=\"Componenti della Ballistae Imperialis\">" +
+                  f.hotspots.map(function(h) { return "<button class=\"hotspot\" type=\"button\" data-id=\"" + h.id + "\" aria-pressed=\"false\"" +
+                      " aria-label=\"" + esc(h.name) + ". " + esc(h.description) + "\" style=\"left:" + h.x + "%;top:" + h.y + "%\">" +
+                      "<span class=\"hotspot__pulse\" aria-hidden=\"true\"></span><span class=\"hotspot__dot\" aria-hidden=\"true\"></span>" +
+                      "<span class=\"hotspot__label\">" + esc(h.name) + "</span></button>"; }).join("") +
+                "</div>" +
+              "</div>" +
+              "<div class=\"panel\">" +
+                "<p class=\"codex\">" + esc(f.codex) + "</p><h3 class=\"bp-name\">" + esc(f.name) + "</h3>" +
+                "<div class=\"readout\" id=\"readout\" aria-live=\"polite\"><p style=\"color:var(--ink-faint);font-style:italic\">Passa il mouse o seleziona un punto interattivo per ispezionare ogni componente del motore di torsione.</p></div>" +
+                "<dl class=\"specs\">" + f.specs.map(function(s) { return "<div class=\"specs__item\"><dt class=\"specs__label\">" + esc(s.label) + "</dt>" +
+                    "<dd class=\"specs__value\" title=\"" + esc(s.detail) + "\">" + esc(s.value) + "</dd><p class=\"specs__detail\">" + esc(s.detail) + "</p></div>"; }).join("") + "</dl>" +
+              "</div>" +
+            "</div>";
         }
-        if (f.kind === 'archive') {
-          return `<div class="grid2">
-              <figure class="stage3d" style="height:fit-content"><div class="stage3d__canvas" id="stage-mount"></div>
-                <figcaption class="stage3d__caption">Three interlocking steam-era gears turning in mesh — Ingegno, Lavoro, Futuro.</figcaption></figure>
-              <section class="panel" aria-label="La Nazione archive">
-                <header class="gazette__masthead"><p class="gazette__edition">${esc(f.edition)}</p>
-                  <h3 class="gazette__title">${esc(f.masthead)}</h3><p class="gazette__date">${esc(f.date)}</p></header>
-                <p class="gazette__headline">${esc(f.headline)}</p>
-                <ul class="archive" id="archive">${f.articles.map((a, i) => `<li>
-                    <button class="archive__trigger" type="button" data-id="${a.id}" aria-expanded="${i===0}" aria-controls="art-${a.id}">
-                      <b>${esc(a.title)}</b><span aria-hidden="true">${i===0?'–':'+'}</span></button>
-                    <div class="archive__body" id="art-${a.id}" role="region" aria-label="${esc(a.title)}" ${i===0?'':'hidden'}><p>${esc(a.content)}</p></div></li>`).join('')}</ul>
-              </section>
-            </div>`;
+        if (f.kind === "archive") {
+          return "<div class=\"officine-centered\">" +
+              "<figure class=\"stage3d\"><div class=\"stage3d__canvas\" id=\"stage-mount\"></div>" +
+                "<figcaption class=\"stage3d__caption\">Tre ingranaggi a vapore interconnessi che ruotano in sincronia — Ingegno, Lavoro, Futuro.</figcaption></figure>" +
+              "<section class=\"gazette--central\" aria-label=\"Archivio La Nazione\">" +
+                "<div class=\"oggetto-label\" aria-hidden=\"true\">Oggetto della Memoria</div>" +
+                "<header class=\"gazette__masthead\"><p class=\"gazette__edition\">" + esc(f.edition) + "</p>" +
+                  "<h3 class=\"gazette__title\">" + esc(f.masthead) + "</h3><p class=\"gazette__date\">" + esc(f.date) + "</p></header>" +
+                "<p class=\"gazette__headline\">" + esc(f.headline) + "</p>" +
+                "<ul class=\"archive\" id=\"archive\">" + f.articles.map(function(a, i) { return "<li>" +
+                    "<button class=\"archive__trigger\" type=\"button\" data-id=\"" + a.id + "\" aria-expanded=\"" + (i===0) + "\" aria-controls=\"art-" + a.id + "\">" +
+                      "<b>" + esc(a.title) + "</b><span aria-hidden=\"true\">" + (i===0?"–":"+") + "</span></button>" +
+                    "<div class=\"archive__body\" id=\"art-" + a.id + "\" role=\"region\" aria-label=\"" + esc(a.title) + "\" " + (i===0?"":"hidden") + "><p>" + esc(a.content) + "</p></div></li>"; }).join("") + "</ul>" +
+              "</section>" +
+            "</div>";
         }
         // guardian
-        return `<div class="grid2">
-            <div style="position:relative">
-              <figure class="stage3d"><div class="stage3d__canvas" id="stage-mount"></div>
-                <figcaption class="stage3d__caption">A holographic wireframe digital twin of Earth, orbited by four pulsing guardian nodes.</figcaption></figure>
-              <p class="guardian__designation" aria-hidden="true">${esc(f.designation)}</p>
-              <span class="guardian__status"><i aria-hidden="true"></i> SYSTEM ONLINE · REAL-TIME TWIN</span>
-            </div>
-            <div>
-              <div class="nodes" id="nodes" role="tablist" aria-label="Guardian Core sub-systems">
-                ${f.nodes.map((n, i) => `<button class="nodes__tab" type="button" role="tab" id="tab-${n.id}" data-id="${n.id}"
-                    aria-selected="${i===0}" aria-controls="panel-${n.id}"><b>${esc(n.name)}</b><span>${esc(n.tagline)}</span></button>`).join('')}
-              </div>
-              <div class="panel node-detail" id="node-detail" role="tabpanel" aria-live="polite"></div>
-            </div>
-          </div>`;
+        return "<div class=\"grid2\">" +
+            "<div style=\"position:relative\">" +
+              "<figure class=\"stage3d\"><div class=\"stage3d__canvas\" id=\"stage-mount\"></div>" +
+                "<figcaption class=\"stage3d__caption\">Un gemello digitale olografico wireframe della Terra, orbitato da quattro nodi guardiani pulsanti.</figcaption></figure>" +
+              "<p class=\"guardian__designation\" aria-hidden=\"true\">" + esc(f.designation) + "</p>" +
+              "<span class=\"guardian__status\"><i aria-hidden=\"true\"></i> SISTEMA ONLINE · GEMELLO IN TEMPO REALE</span>" +
+            "</div>" +
+            "<div>" +
+              "<div class=\"nodes\" id=\"nodes\" role=\"tablist\" aria-label=\"Sotto-sistemi del Guardian Core\">" +
+                f.nodes.map(function(n, i) { return "<button class=\"nodes__tab\" type=\"button\" role=\"tab\" id=\"tab-" + n.id + "\" data-id=\"" + n.id + "\"" +
+                    " aria-selected=\"" + (i===0) + "\" aria-controls=\"panel-" + n.id + "\"><b>" + esc(n.name) + "</b><span>" + esc(n.tagline) + "</span></button>"; }).join("") +
+              "</div>" +
+              "<div class=\"panel node-detail\" id=\"node-detail\" role=\"tabpanel\" aria-live=\"polite\"></div>" +
+            "</div>" +
+          "</div>";
       }
 
-      function go(index) {
-        current = ((index % ROOMS.length) + ROOMS.length) % ROOMS.length;
-        const room = ROOMS[current];
-        museumEl.style.setProperty('--accent', room.accent);
-        museumEl.style.setProperty('--accent-soft', room.accentSoft);
-        museumEl.style.setProperty('--bg', room.bg);
-        [...railEl.querySelectorAll('.rail__button')].forEach((b, i) =>
-          b.setAttribute('aria-current', i === current ? 'step' : 'false'));
+      function go(index, skipTransition) {
+        if (transitioning) return;
+        var newIndex = ((index % ROOMS.length) + ROOMS.length) % ROOMS.length;
+        if (newIndex === current && !skipTransition) return;
 
-        disposeStage();
-        stageEl.innerHTML = `<div class="room__inner">
-            <p class="room__eyebrow"><b>Room ${room.index}</b><span aria-hidden="true">·</span>${esc(room.year)}<span aria-hidden="true">·</span>${esc(room.era)}</p>
-            <h2 class="room__title">${esc(room.title)}</h2>
-            <p class="room__subtitle">${esc(room.subtitle)}</p>
-            <p class="room__narrative">${esc(room.narrative)}</p>
-            ${featureHTML(room)}
-            <div class="pager">
-              <button type="button" id="prev" ${room.index === 0 ? 'disabled' : ''}>← Previous room</button>
-              <span class="pager__progress">${room.index + 1} / ${ROOMS.length}</span>
-              <button type="button" id="next" ${room.index === ROOMS.length - 1 ? 'disabled' : ''}>Next room →</button>
-            </div>
-            ${room.index === ROOMS.length - 1 ? `<footer class="closing"><b>Uscita · La Sala degli Specchi</b><p>${esc(CLOSING)}</p></footer>` : ''}
-          </div>`;
-        stageEl.scrollTop = 0;
+        var fromRoom = ROOMS[current];
+        var toRoom = ROOMS[newIndex];
 
-        const mount = document.getElementById('stage-mount');
-        const opts = { portal: { cameraZ: 4, fov: 70 }, ballista: { cameraZ: 6.5, fov: 50 }, officine: { cameraZ: 6, fov: 55 }, guardian: { cameraZ: 6, fov: 55 } }[room.scene];
-        mountStage(mount, room, opts);
-        wireInteractions(room);
+        var renderRoom = function() {
+          current = newIndex;
+          var room = ROOMS[current];
+          museumEl.style.setProperty("--accent", room.accent);
+          museumEl.style.setProperty("--accent-soft", room.accentSoft);
+          museumEl.style.setProperty("--bg", room.bg);
+          var buttons = railEl.querySelectorAll(".rail__button");
+          for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute("aria-current", i === current ? "step" : "false");
+          }
 
-        const prev = document.getElementById('prev'), next = document.getElementById('next');
-        if (prev) prev.addEventListener('click', () => go(current - 1));
-        if (next) next.addEventListener('click', () => go(current + 1));
+          disposeStage();
+          stageEl.innerHTML = "<div class=\"room__inner\">" +
+              "<p class=\"room__eyebrow\"><b>Sala " + room.index + "</b><span aria-hidden=\"true\">·</span>" + esc(room.year) + "<span aria-hidden=\"true\">·</span>" + esc(room.era) + "</p>" +
+              "<h2 class=\"room__title\">" + esc(room.title) + "</h2>" +
+              "<p class=\"room__subtitle\">" + esc(room.subtitle) + "</p>" +
+              "<p class=\"room__narrative\">" + esc(room.narrative) + "</p>" +
+              featureHTML(room) +
+              "<div class=\"pager\">" +
+                "<button type=\"button\" id=\"prev\" " + (room.index === 0 ? "disabled" : "") + ">← Sala precedente</button>" +
+                "<span class=\"pager__progress\">" + (room.index + 1) + " / " + ROOMS.length + "</span>" +
+                "<button type=\"button\" id=\"next\" " + (room.index === ROOMS.length - 1 ? "disabled" : "") + ">Sala successiva →</button>" +
+              "</div>" +
+              (room.index === ROOMS.length - 1 ? "<footer class=\"closing\"><b>Uscita · La Sala degli Specchi</b><p>" + esc(CLOSING) + "</p></footer>" : "") +
+            "</div>";
+          stageEl.scrollTop = 0;
+
+          var mount = document.getElementById("stage-mount");
+          var opts = { portal: { cameraZ: 4, fov: 70 }, ballista: { cameraZ: 6.5, fov: 50 }, officine: { cameraZ: 6, fov: 55 }, guardian: { cameraZ: 6, fov: 55 } }[room.scene];
+          mountStage(mount, room, opts);
+          wireInteractions(room);
+
+          var prev = document.getElementById("prev"), next = document.getElementById("next");
+          if (prev) prev.addEventListener("click", function() { go(current - 1); });
+          if (next) next.addEventListener("click", function() { go(current + 1); });
+          transitioning = false;
+        };
+
+        if (skipTransition || fromRoom.index === newIndex) {
+          renderRoom();
+        } else {
+          transitioning = true;
+          runCorridorTransition(fromRoom.bg, toRoom.bg, renderRoom);
+        }
       }
 
       function wireInteractions(room) {
-        const f = room.feature;
-        if (f.kind === 'blueprint') {
-          const readout = document.getElementById('readout');
-          const show = (h) => {
-            [...document.querySelectorAll('.hotspot')].forEach(b => b.setAttribute('aria-pressed', b.dataset.id === h.id));
-            readout.innerHTML = `<b>${esc(h.name)}</b><p>${esc(h.description)}</p>`;
+        var f = room.feature;
+        if (f.kind === "blueprint") {
+          var readout = document.getElementById("readout");
+          var show = function(h) {
+            var all = document.querySelectorAll(".hotspot");
+            for (var i = 0; i < all.length; i++) {
+              all[i].setAttribute("aria-pressed", all[i].dataset.id === h.id ? "true" : "false");
+            }
+            readout.innerHTML = "<b>" + esc(h.name) + "</b><p>" + esc(h.description) + "</p>";
           };
-          document.querySelectorAll('.hotspot').forEach(btn => {
-            const h = f.hotspots.find(x => x.id === btn.dataset.id);
-            ['click', 'mouseenter', 'focus'].forEach(ev => btn.addEventListener(ev, () => show(h)));
+          document.querySelectorAll(".hotspot").forEach(function(btn) {
+            var h = f.hotspots.find(function(x) { return x.id === btn.dataset.id; });
+            ["click", "mouseenter", "focus"].forEach(function(ev) { btn.addEventListener(ev, function() { show(h); }); });
           });
         }
-        if (f.kind === 'archive') {
-          document.querySelectorAll('.archive__trigger').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const open = btn.getAttribute('aria-expanded') === 'true';
-              document.querySelectorAll('.archive__trigger').forEach(b => {
-                b.setAttribute('aria-expanded', 'false');
-                b.querySelector('span').textContent = '+';
-                document.getElementById('art-' + b.dataset.id).hidden = true;
+        if (f.kind === "archive") {
+          document.querySelectorAll(".archive__trigger").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+              var open = btn.getAttribute("aria-expanded") === "true";
+              document.querySelectorAll(".archive__trigger").forEach(function(b) {
+                b.setAttribute("aria-expanded", "false");
+                b.querySelector("span").textContent = "+";
+                document.getElementById("art-" + b.dataset.id).hidden = true;
               });
               if (!open) {
-                btn.setAttribute('aria-expanded', 'true');
-                btn.querySelector('span').textContent = '–';
-                document.getElementById('art-' + btn.dataset.id).hidden = false;
+                btn.setAttribute("aria-expanded", "true");
+                btn.querySelector("span").textContent = "–";
+                document.getElementById("art-" + btn.dataset.id).hidden = false;
               }
             });
           });
         }
-        if (f.kind === 'guardian') {
-          const detail = document.getElementById('node-detail');
-          const show = (n) => {
-            document.querySelectorAll('.nodes__tab').forEach(t => t.setAttribute('aria-selected', t.dataset.id === n.id));
-            detail.id = 'panel-' + n.id; detail.setAttribute('aria-labelledby', 'tab-' + n.id);
-            detail.innerHTML = `<h3 class="node-detail__name">${esc(n.name)}</h3><p>${esc(n.description)}</p>
-              <ul>${n.items.map(it => `<li>${esc(it)}</li>`).join('')}</ul>`;
+        if (f.kind === "guardian") {
+          var detail = document.getElementById("node-detail");
+          var showNode = function(n) {
+            var tabs = document.querySelectorAll(".nodes__tab");
+            for (var i = 0; i < tabs.length; i++) {
+              tabs[i].setAttribute("aria-selected", tabs[i].dataset.id === n.id ? "true" : "false");
+            }
+            detail.id = "panel-" + n.id; detail.setAttribute("aria-labelledby", "tab-" + n.id);
+            detail.innerHTML = "<h3 class=\"node-detail__name\">" + esc(n.name) + "</h3><p>" + esc(n.description) + "</p>" +
+              "<ul>" + n.items.map(function(it) { return "<li>" + esc(it) + "</li>"; }).join("") + "</ul>";
           };
-          document.querySelectorAll('.nodes__tab').forEach(t => {
-            const n = f.nodes.find(x => x.id === t.dataset.id);
-            t.addEventListener('click', () => show(n));
+          document.querySelectorAll(".nodes__tab").forEach(function(t) {
+            var n = f.nodes.find(function(x) { return x.id === t.dataset.id; });
+            t.addEventListener("click", function() { showNode(n); });
           });
-          show(f.nodes[0]);
+          showNode(f.nodes[0]);
         }
       }
 
-      go(0);
+      go(0, true);
     </script>
   </body>
 </html>
